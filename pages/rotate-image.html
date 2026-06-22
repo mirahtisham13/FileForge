@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rotate & Flip Image — FileForge</title>
+  <meta name="description" content="Rotate images 90, 180, 270 degrees or flip them horizontally and vertically. Free online tool."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .rotate-controls {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .rotate-btn {
+      padding: 10px 16px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text); font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all var(--transition);
+    }
+    .rotate-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .rotate-btn-icon { font-size: 1.2rem; }
+    
+    .rotate-preview-area {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; min-height: 300px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #previewImg {
+      max-width: 100%; max-height: 400px; transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Rotate Image</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <path d="M9 12a3 3 0 106 0"/>
+            <polyline points="15,10 15,13 12,13"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Rotate & Flip Image</h1>
+          <p class="tool-page-subtitle">Instantly rotate or flip your images horizontally/vertically.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp"/>
+        <span class="drop-zone-icon">🔁</span>
+        <h3>Drop your image here</h3>
+        <p>JPG · PNG · WEBP supported</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse Image</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel">
+        <div class="rotate-controls">
+          <button class="rotate-btn" id="btnRotateLeft"><span class="rotate-btn-icon">↺</span> Left 90°</button>
+          <button class="rotate-btn" id="btnRotateRight"><span class="rotate-btn-icon">↻</span> Right 90°</button>
+          <button class="rotate-btn" id="btnFlipH"><span class="rotate-btn-icon">↔</span> Flip Horizontal</button>
+          <button class="rotate-btn" id="btnFlipV"><span class="rotate-btn-icon">↕</span> Flip Vertical</button>
+        </div>
+
+        <div class="rotate-preview-area">
+          <img id="previewImg" src="" alt="Preview"/>
+        </div>
+
+        <div class="result-panel" id="resultPanel" style="margin-top:20px;">
+          <h4>✅ Image Processed!</h4>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download Image</button>
+            <button class="btn-secondary" id="resetBtn">Process Another</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="applyBtn" style="margin-top:20px;">🔁 Apply & Download</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="../js/tools/rotateImage.js"></script>
+</body>
+</html>

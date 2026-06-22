@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rearrange PDF Pages — FileForge</title>
+  <meta name="description" content="Drag and drop to reorder, delete, or duplicate PDF pages. Free, browser-based, private."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    /* ── Page Grid ── */
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+      min-height: 80px;
+    }
+
+    .page-thumb {
+      position: relative;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: grab;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      user-select: none;
+      touch-action: none;
+    }
+    .page-thumb:hover {
+      border-color: rgba(var(--accent-rgb), 0.5);
+      box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.15);
+    }
+    .page-thumb.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.25);
+    }
+    .page-thumb.dragging {
+      opacity: 0.35;
+      border-style: dashed;
+      transform: scale(0.97);
+    }
+    .page-thumb.drop-target {
+      border-color: var(--accent);
+      border-style: dashed;
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.3);
+    }
+
+    .page-canvas-wrap {
+      width: 100%;
+      aspect-ratio: 0.707;
+      background: var(--bg-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .page-canvas-wrap canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* skeleton loader */
+    .page-skeleton {
+      width: 100%;
+      aspect-ratio: 0.707;
+      background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    .page-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-top: 1px solid var(--border);
+      background: var(--card);
+    }
+    .page-num {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-2);
+    }
+    .page-actions {
+      display: flex;
+      gap: 4px;
+    }
+    .page-action-btn {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-3);
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .page-action-btn:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-hover); }
+    .page-action-btn.delete:hover { background: rgba(239,68,68,0.12); color: #ef4444; border-color: rgba(239,68,68,0.3); }
+    .page-action-btn.dup:hover { background: rgba(16,185,129,0.1); color: #10b981; border-color: rgba(16,185,129,0.3); }
+
+    /* drag insert indicator */
+    .drop-indicator {
+      width: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      height: 100%;
+      position: absolute;
+      left: -2px;
+      top: 0;
+      pointer-events: none;
+      display: none;
+    }
+    .page-thumb.show-indicator .drop-indicator { display: block; }
+
+    /* toolbar */
+    .rearrange-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-top: 24px;
+    }
+    .toolbar-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-right: 4px;
+    }
+    .btn-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-tool:hover { border-color: var(--accent); color: var(--accent); background: rgba(var(--accent-rgb),0.07); }
+    .btn-tool:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-tool.danger:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.07); }
+
+    .page-count-badge {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: var(--text-3);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    /* empty state */
+    .empty-grid {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 48px;
+      color: var(--text-3);
+      font-size: 0.9rem;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Rearrange Pages</span>
+      </nav>
+
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="7" height="9" rx="1"/>
+            <rect x="15" y="3" width="7" height="9" rx="1"/>
+            <rect x="2" y="15" width="7" height="6" rx="1"/>
+            <rect x="15" y="15" width="7" height="6" rx="1"/>
+            <path d="M12 7v10M9.5 14l2.5 3 2.5-3"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Rearrange PDF Pages</h1>
+          <p class="tool-page-subtitle">Drag & drop page thumbnails to reorder, delete, or duplicate pages. Then save as a new PDF.</p>
+        </div>
+      </div>
+
+      <!-- Drop Zone -->
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf"/>
+        <span class="drop-zone-icon">📑</span>
+        <h3>Drop your PDF here</h3>
+        <p>All pages will be rendered as thumbnails — drag to reorder</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+
+      <!-- Loading bar shown while rendering thumbnails -->
+      <div class="progress-wrap" id="renderProgress" style="margin-top:20px;">
+        <div class="progress-label">
+          <span class="msg" id="renderMsg">Rendering pages...</span>
+          <span class="pct" id="renderPct">0%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="renderFill"></div></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="rearrange-toolbar" id="toolbar" style="display:none;">
+        <span class="toolbar-label">Pages:</span>
+        <button class="btn-tool" id="btnReverseAll" title="Reverse page order">⇅ Reverse All</button>
+        <button class="btn-tool" id="btnSelectAll" title="Select all pages">☑ Select All</button>
+        <button class="btn-tool danger" id="btnDeleteSelected" disabled title="Delete selected pages">🗑 Delete Selected</button>
+        <button class="btn-tool" id="btnDupSelected" disabled title="Duplicate selected pages">⧉ Duplicate</button>
+        <button class="btn-tool" id="btnResetOrder" title="Reset to original order">↺ Reset Order</button>
+        <span class="page-count-badge" id="pageCountBadge">0 pages</span>
+      </div>
+
+      <!-- Page Grid -->
+      <div class="pages-grid" id="pagesGrid"></div>
+
+      <!-- Action Panel -->
+      <div class="action-panel" id="actionPanel">
+        <div class="progress-wrap" id="saveProgress">
+          <div class="progress-label">
+            <span class="msg">Building PDF...</span>
+            <span class="pct" id="savePct">0%</span>
+          </div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="saveFill"></div></div>
+        </div>
+        <div class="result-panel" id="resultPanel">
+          <h4>✅ PDF Saved!</h4>
+          <p id="resultInfo">Your reordered PDF is ready.</p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download PDF</button>
+            <button class="btn-secondary" id="continueEditBtn">Continue Editing</button>
+            <button class="btn-secondary" id="resetBtn">Start Over</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="saveBtn">💾 Save Reordered PDF</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="../js/tools/rearrange.js"></script>
+</body>
+</html>

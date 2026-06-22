@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Size Calculator — FileForge</title>
+  <meta name="description" content="Convert between bytes, KB, MB, GB, TB instantly."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .calc-grid { display:grid; grid-template-columns:1fr; gap:16px; max-width:500px; margin:0 auto; }
+    .calc-row { display:flex; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .calc-label { width:80px; padding:12px; font-weight:600; color:var(--text-2); background:var(--surface-2); border-right:1px solid var(--border); text-align:center; }
+    .calc-input { flex:1; background:none; border:none; padding:12px 16px; color:var(--text); font-size:1.1rem; outline:none; font-family:monospace; }
+    .calc-input:focus { background:rgba(var(--accent-rgb),0.05); }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Size Calculator</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+            <path d="M12 12h.01"></path>
+            <path d="M17 12h.01"></path>
+            <path d="M7 12h.01"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Data Size Calculator</h1>
+          <p class="tool-page-subtitle">Instantly convert data storage units. Type a number in any field to convert.</p>
+        </div>
+      </div>
+
+      <div class="action-panel visible" id="actionPanel" style="padding-top:40px;padding-bottom:40px;">
+        <div class="calc-grid">
+          <div class="calc-row"><div class="calc-label">Bits</div><input type="number" class="calc-input" id="inp-bit" placeholder="0"/></div>
+          <div class="calc-row"><div class="calc-label">Bytes</div><input type="number" class="calc-input" id="inp-b" placeholder="0"/></div>
+          <div class="calc-row"><div class="calc-label">KB</div><input type="number" class="calc-input" id="inp-kb" placeholder="0"/></div>
+          <div class="calc-row"><div class="calc-label">MB</div><input type="number" class="calc-input" id="inp-mb" placeholder="0"/></div>
+          <div class="calc-row"><div class="calc-label">GB</div><input type="number" class="calc-input" id="inp-gb" placeholder="0"/></div>
+          <div class="calc-row"><div class="calc-label">TB</div><input type="number" class="calc-input" id="inp-tb" placeholder="0"/></div>
+        </div>
+        <p style="text-align:center;color:var(--text-3);font-size:0.8rem;margin-top:20px;">Using binary calculation: 1 KB = 1024 Bytes</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script src="../js/tools/sizeCalculator.js"></script>
+</body>
+</html>

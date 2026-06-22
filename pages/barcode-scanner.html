@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barcode & QR Scanner — FileForge</title>
+  <meta name="description" content="Scan barcodes and QR codes directly from your browser using your webcam."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .scanner-wrap {
+      max-width: 500px; margin: 0 auto; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+    #reader { width: 100%; border: none !important; }
+    #reader button {
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; margin: 5px;
+    }
+    #reader a { color: var(--accent); }
+    .scan-result {
+      padding: 20px; background: var(--surface-2); border-top: 1px solid var(--border);
+      display: none;
+    }
+    .result-text {
+      font-family: monospace; font-size: 1rem; word-break: break-all;
+      padding: 12px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 4px; margin-top: 10px; color: var(--text);
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Barcode Scanner</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7V4h3"></path><path d="M20 7V4h-3"></path><path d="M4 17v3h3"></path><path d="M20 17v3h-3"></path>
+            <rect x="7" y="7" width="2" height="10"></rect><rect x="11" y="7" width="2" height="10"></rect><rect x="15" y="7" width="2" height="10"></rect>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Barcode & QR Scanner</h1>
+          <p class="tool-page-subtitle">Use your camera to scan barcodes and QR codes instantly.</p>
+        </div>
+      </div>
+
+      <div class="action-panel visible" id="actionPanel" style="max-width: 600px; margin: 0 auto;">
+        <div class="scanner-wrap">
+          <div id="reader"></div>
+          <div class="scan-result" id="scanResult">
+            <h4 style="margin:0 0 10px 0;display:flex;align-items:center;justify-content:space-between;">
+              <span>✅ Scanned Successfully</span>
+              <span id="formatBadge" style="font-size:0.7rem;padding:2px 6px;background:rgba(16,185,129,0.2);color:#10b981;border-radius:4px;">QR_CODE</span>
+            </h4>
+            <div class="result-text" id="resultText"></div>
+            <div style="margin-top:16px;display:flex;gap:10px;">
+              <button class="btn-primary" id="copyBtn" style="padding:6px 12px;font-size:0.85rem;">📋 Copy</button>
+              <button class="btn-secondary" id="openLinkBtn" style="padding:6px 12px;font-size:0.85rem;display:none;">🌐 Open Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="../js/tools/barcodeScanner.js"></script>
+</body>
+</html>

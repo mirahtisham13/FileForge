@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Extract PDF Pages — FileForge</title>
+  <meta name="description" content="Extract specific pages from a PDF document to create a new PDF. Free online tool."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .page-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 16px; margin-top: 20px;
+    }
+    .page-item {
+      position: relative; background: #fff; border: 2px solid transparent;
+      border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+    }
+    .page-item.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+    .page-item-img {
+      width: 100%; aspect-ratio: 1 / 1.4; object-fit: contain;
+      background: #f1f5f9; border-bottom: 1px solid var(--border);
+    }
+    .page-item-num {
+      padding: 8px; text-align: center; font-size: 0.85rem;
+      font-weight: 600; color: #1e293b; background: #fff;
+    }
+    .page-item-check {
+      position: absolute; top: 8px; right: 8px; width: 24px; height: 24px;
+      background: var(--accent); color: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; opacity: 0; transform: scale(0.8); transition: all 0.2s;
+    }
+    .page-item.selected .page-item-check { opacity: 1; transform: scale(1); }
+    .selection-controls {
+      display: flex; gap: 12px; margin-top: 20px; align-items: center; flex-wrap: wrap;
+      background: var(--surface); padding: 12px 16px; border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Extract PDF Pages</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M9 15l2 2 4-4"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Extract PDF Pages</h1>
+          <p class="tool-page-subtitle">Select specific pages to extract into a new PDF document.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf"/>
+        <span class="drop-zone-icon">✂️</span>
+        <h3>Drop your PDF here</h3>
+        <p>Private & secure — processed locally</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel">
+        <div class="selection-controls">
+          <span style="font-weight:600;font-size:0.9rem;" id="selectionCount">0 pages selected</span>
+          <div style="margin-left:auto;display:flex;gap:8px;">
+            <button class="btn-secondary" id="btnSelectAll" style="padding:6px 12px;font-size:0.8rem;">Select All</button>
+            <button class="btn-secondary" id="btnDeselectAll" style="padding:6px 12px;font-size:0.8rem;">Deselect All</button>
+          </div>
+        </div>
+
+        <div class="page-grid" id="pageGrid"></div>
+        
+        <div class="progress-wrap" id="progressWrap" style="margin-top:16px;">
+          <div class="progress-label">
+            <span class="msg" id="progressMsg">Extracting pages...</span>
+            <span class="pct" id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+        </div>
+
+        <div class="result-panel" id="resultPanel" style="margin-top:20px;">
+          <h4>✅ PDF Extracted!</h4>
+          <p id="resultInfo"></p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download New PDF</button>
+            <button class="btn-secondary" id="resetBtn">Extract Another</button>
+          </div>
+        </div>
+        
+        <button class="btn-primary" id="extractBtn" style="margin-top:20px;" disabled>✂️ Extract Selected Pages</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="../js/tools/extractPdf.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Code Generator — FileForge</title>
+  <meta name="description" content="Generate QR codes for URLs, text, emails, WiFi passwords and more. Free, instant, downloadable."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .qr-layout { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:24px; }
+    @media(max-width:700px){ .qr-layout{grid-template-columns:1fr;} }
+    .qr-canvas-wrap {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:32px; gap:20px; min-height:320px;
+    }
+    #qrCanvas {
+      border-radius:12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      background:#fff;
+    }
+    .qr-placeholder {
+      display:flex; flex-direction:column; align-items:center; gap:12px;
+      color:var(--text-3); font-size:0.9rem; text-align:center;
+    }
+    .qr-placeholder-icon { font-size:3.5rem; opacity:0.4; }
+    .qr-type-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:20px; }
+    .qr-type-btn {
+      padding:10px 6px; background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius-sm); cursor:pointer; font-family:inherit;
+      font-size:0.78rem; font-weight:600; color:var(--text-2);
+      transition:all var(--transition); text-align:center;
+    }
+    .qr-type-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(var(--accent-rgb),0.08); }
+    .qr-type-btn .type-icon { font-size:1.2rem; display:block; margin-bottom:4px; }
+    .color-picker-row { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    .color-picker-group { display:flex; flex-direction:column; gap:6px; }
+    .color-picker-group label { font-size:0.8rem; font-weight:600; color:var(--text-2); }
+    .color-picker-group input[type=color] {
+      width:44px; height:36px; border:1px solid var(--border);
+      border-radius:var(--radius-xs); cursor:pointer; background:none; padding:2px;
+    }
+    .download-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    .size-btns { display:flex; gap:8px; flex-wrap:wrap; }
+    .size-btn {
+      padding:6px 14px; background:var(--surface); border:1px solid var(--border);
+      border-radius:100px; color:var(--text-2); font-size:0.78rem; font-weight:600;
+      cursor:pointer; font-family:inherit; transition:all var(--transition);
+    }
+    .size-btn.active, .size-btn:hover { border-color:var(--accent); color:var(--accent); }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>QR Code Generator</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="5" y="5" width="3" height="3" fill="#10b981"/><rect x="16" y="5" width="3" height="3" fill="#10b981"/>
+            <rect x="5" y="16" width="3" height="3" fill="#10b981"/>
+            <path d="M14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="#10b981" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">QR Code Generator</h1>
+          <p class="tool-page-subtitle">Generate QR codes for URLs, text, emails, phone numbers, WiFi, and more. Download as PNG or SVG.</p>
+        </div>
+      </div>
+
+      <div class="qr-layout">
+        <!-- Left: Settings -->
+        <div>
+          <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">QR Type</p>
+          <div class="qr-type-grid">
+            <button class="qr-type-btn active" data-type="url"><span class="type-icon">🔗</span>URL</button>
+            <button class="qr-type-btn" data-type="text"><span class="type-icon">📝</span>Text</button>
+            <button class="qr-type-btn" data-type="email"><span class="type-icon">📧</span>Email</button>
+            <button class="qr-type-btn" data-type="phone"><span class="type-icon">📞</span>Phone</button>
+            <button class="qr-type-btn" data-type="wifi"><span class="type-icon">📶</span>WiFi</button>
+            <button class="qr-type-btn" data-type="vcard"><span class="type-icon">👤</span>vCard</button>
+          </div>
+
+          <!-- Dynamic input area -->
+          <div id="inputArea"></div>
+
+          <div style="margin-top:20px;">
+            <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Size</p>
+            <div class="size-btns">
+              <button class="size-btn" data-size="128">128px</button>
+              <button class="size-btn active" data-size="256">256px</button>
+              <button class="size-btn" data-size="512">512px</button>
+              <button class="size-btn" data-size="1024">1024px</button>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Colors</p>
+            <div class="color-picker-row">
+              <div class="color-picker-group">
+                <label>QR Color</label>
+                <input type="color" id="qrColor" value="#000000"/>
+              </div>
+              <div class="color-picker-group">
+                <label>Background</label>
+                <input type="color" id="bgColor" value="#ffffff"/>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Error Correction</p>
+            <div class="options-row" style="margin-bottom:0;">
+              <div class="option-group">
+                <select id="errorLevel">
+                  <option value="L">Low (7%) — Smallest QR</option>
+                  <option value="M" selected>Medium (15%)</option>
+                  <option value="Q">Quartile (25%)</option>
+                  <option value="H">High (30%) — Most reliable</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="generateBtn" style="margin-top:20px;">🔲 Generate QR Code</button>
+        </div>
+
+        <!-- Right: Preview -->
+        <div>
+          <div class="qr-canvas-wrap">
+            <div class="qr-placeholder" id="qrPlaceholder">
+              <span class="qr-placeholder-icon">🔲</span>
+              <p>Fill in the details and click Generate</p>
+            </div>
+            <canvas id="qrCanvas" style="display:none;"></canvas>
+            <div class="download-btns" id="downloadBtns" style="display:none;">
+              <button class="btn-primary" id="downloadPng" style="width:auto;padding:10px 20px;">⬇️ PNG</button>
+              <button class="btn-secondary" id="downloadSvg">⬇️ SVG</button>
+              <button class="btn-secondary" id="copyBtn">📋 Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="../js/tools/qrGenerator.js"></script>
+</body>
+</html>

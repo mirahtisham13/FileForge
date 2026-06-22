@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rotate PDF — FileForge</title>
+  <meta name="description" content="Rotate PDF pages to any angle for free. Browser-based, private, no uploads needed."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .rotate-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .rotate-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 14px 10px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+      text-align: center;
+    }
+    .rotate-btn:hover, .rotate-btn.selected {
+      border-color: #ec4899;
+      background: rgba(236,72,153,0.08);
+      color: #ec4899;
+    }
+    .rotate-btn .rot-icon { font-size: 1.4rem; display: block; margin-bottom: 6px; }
+
+    .page-scope {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .scope-btn {
+      padding: 8px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-2);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+    }
+    .scope-btn.active {
+      background: rgba(var(--accent-rgb), 0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Rotate PDF</span>
+      </nav>
+
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <path d="M9 12a3 3 0 106 0"/>
+            <polyline points="15,10 15,13 12,13"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Rotate PDF</h1>
+          <p class="tool-page-subtitle">Rotate all or specific pages in your PDF — 90°, 180°, or 270°.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf"/>
+        <span class="drop-zone-icon">🔄</span>
+        <h3>Drop your PDF here</h3>
+        <p>Select one PDF file to rotate its pages</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+
+      <div class="action-panel" id="actionPanel">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Rotation Angle</p>
+        <div class="rotate-options">
+          <button class="rotate-btn selected" data-deg="90" id="rot90">
+            <span class="rot-icon">↻</span>90° Clockwise
+          </button>
+          <button class="rotate-btn" data-deg="180" id="rot180">
+            <span class="rot-icon">↕</span>180° Flip
+          </button>
+          <button class="rotate-btn" data-deg="270" id="rot270">
+            <span class="rot-icon">↺</span>90° Counter-CW
+          </button>
+        </div>
+
+        <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Apply To</p>
+        <div class="page-scope">
+          <button class="scope-btn active" data-scope="all" id="scopeAll">All Pages</button>
+          <button class="scope-btn" data-scope="range" id="scopeRange">Page Range</button>
+          <button class="scope-btn" data-scope="odd" id="scopeOdd">Odd Pages</button>
+          <button class="scope-btn" data-scope="even" id="scopeEven">Even Pages</button>
+        </div>
+
+        <div class="option-group" id="rangeInputWrap" style="display:none;margin-bottom:20px;">
+          <label for="pageRange">Page Range (e.g. 1-3, 5)</label>
+          <input type="text" id="pageRange" placeholder="e.g. 1-3, 5, 7-9"/>
+        </div>
+
+        <p id="pageInfo" style="font-size:0.85rem;color:var(--text-2);margin-bottom:16px;"></p>
+
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-label">
+            <span class="msg">Rotating pages...</span>
+            <span class="pct">0%</span>
+          </div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+        </div>
+        <div class="result-panel" id="resultPanel">
+          <h4>✅ Rotation Complete!</h4>
+          <p id="resultInfo">Your rotated PDF is ready.</p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download Rotated PDF</button>
+            <button class="btn-secondary" id="resetBtn">Rotate Another</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="rotateBtn">🔄 Rotate PDF</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="../js/tools/rotate.js"></script>
+</body>
+</html>

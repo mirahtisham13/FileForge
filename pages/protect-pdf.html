@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Protect PDF — FileForge</title>
+  <meta name="description" content="Secure your PDF files with a password. Free, private, and runs entirely in your browser."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .password-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .password-input-wrap input {
+      width: 100%;
+      padding-right: 40px;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-3);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    .password-toggle:hover { color: var(--text); }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Password Protect PDF</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0110 0v4"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Password Protect PDF</h1>
+          <p class="tool-page-subtitle">Encrypt and protect your PDF with a password. Requires password to open.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf"/>
+        <span class="drop-zone-icon">🔐</span>
+        <h3>Drop your PDF here</h3>
+        <p>Your file is processed locally, keeping it 100% private</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+
+      <div class="action-panel" id="actionPanel">
+        <div class="option-group" style="max-width: 400px; margin-bottom: 20px;">
+          <label for="pdfPassword">Set a Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="pdfPassword" placeholder="Enter secure password" />
+            <button class="password-toggle" id="togglePasswordBtn">👁️</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-3); margin-top: 8px;">Make sure to remember your password! It cannot be recovered if forgotten.</p>
+        </div>
+
+        <div class="result-panel" id="resultPanel" style="margin-top:20px;">
+          <h4>✅ PDF Protected!</h4>
+          <p id="resultInfo"></p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download Secured PDF</button>
+            <button class="btn-secondary" id="resetBtn">Protect Another</button>
+          </div>
+        </div>
+        
+        <button class="btn-primary" id="protectBtn" style="margin-top:20px;">🔐 Protect PDF</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="../js/tools/protectPdf.js"></script>
+</body>
+</html>

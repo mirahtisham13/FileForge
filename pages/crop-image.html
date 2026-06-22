@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crop Image — FileForge</title>
+  <meta name="description" content="Crop images online for free with an interactive drag-to-crop tool. JPG, PNG, WEBP supported."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .crop-workspace {
+      position: relative;
+      display: inline-block;
+      cursor: crosshair;
+      user-select: none;
+      line-height: 0;
+    }
+    #cropCanvas { display: block; max-width: 100%; border-radius: 8px; }
+    .crop-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+    }
+    .crop-box {
+      position: absolute;
+      border: 2px solid #6c63ff;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+      cursor: move;
+      pointer-events: all;
+    }
+    .crop-handle {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: #6c63ff;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      pointer-events: all;
+    }
+    .crop-handle.nw { top:-6px; left:-6px; cursor:nw-resize; }
+    .crop-handle.ne { top:-6px; right:-6px; cursor:ne-resize; }
+    .crop-handle.sw { bottom:-6px; left:-6px; cursor:sw-resize; }
+    .crop-handle.se { bottom:-6px; right:-6px; cursor:se-resize; }
+    .crop-handle.n  { top:-6px; left:calc(50% - 6px); cursor:n-resize; }
+    .crop-handle.s  { bottom:-6px; left:calc(50% - 6px); cursor:s-resize; }
+    .crop-handle.w  { left:-6px; top:calc(50% - 6px); cursor:w-resize; }
+    .crop-handle.e  { right:-6px; top:calc(50% - 6px); cursor:e-resize; }
+
+    .crop-info-bar {
+      display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+      padding: 10px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: var(--text-2);
+    }
+    .crop-info-bar strong { color: var(--accent); }
+
+    .crop-canvas-container {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: auto;
+      min-height: 200px;
+      margin-top: 20px;
+    }
+
+    .aspect-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .aspect-btn {
+      padding:6px 14px; background:var(--surface); border:1px solid var(--border);
+      border-radius:100px; color:var(--text-2); font-size:0.78rem; font-weight:600;
+      cursor:pointer; font-family:inherit; transition:all var(--transition);
+    }
+    .aspect-btn.active, .aspect-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(var(--accent-rgb),0.07); }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Crop Image</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2v14h14"/><path d="M2 6h14v14"/>
+            <rect x="6" y="6" width="8" height="8" stroke-dasharray="2 1"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Crop Image</h1>
+          <p class="tool-page-subtitle">Drag to select any crop area. Use aspect ratio presets or crop freely.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp"/>
+        <span class="drop-zone-icon">✂️</span>
+        <h3>Drop your image here</h3>
+        <p>JPG · PNG · WEBP — drag to select crop region</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse Image</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Aspect Ratio</p>
+        <div class="aspect-btns">
+          <button class="aspect-btn active" data-ratio="free">Free</button>
+          <button class="aspect-btn" data-ratio="1:1">1:1 Square</button>
+          <button class="aspect-btn" data-ratio="4:3">4:3</button>
+          <button class="aspect-btn" data-ratio="16:9">16:9</button>
+          <button class="aspect-btn" data-ratio="3:2">3:2</button>
+          <button class="aspect-btn" data-ratio="2:3">2:3 Portrait</button>
+          <button class="aspect-btn" data-ratio="9:16">9:16 Story</button>
+        </div>
+
+        <div class="options-row">
+          <div class="option-group">
+            <label for="cropFormat">Output Format</label>
+            <select id="cropFormat">
+              <option value="same">Same as original</option>
+              <option value="image/jpeg">JPG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="cropQuality">Quality</label>
+            <select id="cropQuality">
+              <option value="0.85">85% (recommended)</option>
+              <option value="0.95">95% (high quality)</option>
+              <option value="1">100% (lossless)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Crop canvas area -->
+        <div class="crop-canvas-container" id="cropCanvasContainer">
+          <div class="crop-workspace" id="cropWorkspace">
+            <canvas id="cropCanvas"></canvas>
+            <div class="crop-overlay" id="cropOverlay">
+              <div class="crop-box" id="cropBox" style="display:none;">
+                <div class="crop-handle nw"></div>
+                <div class="crop-handle ne"></div>
+                <div class="crop-handle sw"></div>
+                <div class="crop-handle se"></div>
+                <div class="crop-handle n"></div>
+                <div class="crop-handle s"></div>
+                <div class="crop-handle w"></div>
+                <div class="crop-handle e"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info bar -->
+        <div class="crop-info-bar" id="cropInfoBar" style="display:none;">
+          <span>Crop: <strong id="cropW">0</strong> × <strong id="cropH">0</strong> px</span>
+          <span>Position: <strong id="cropX">0</strong>, <strong id="cropY">0</strong></span>
+          <span style="margin-left:auto;font-size:0.8rem;color:var(--text-3);">Drag handles to resize · Drag inside to move</span>
+        </div>
+
+        <div class="result-panel" id="resultPanel" style="margin-top:16px;">
+          <h4>✅ Image Cropped!</h4>
+          <p id="resultInfo"></p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download Cropped Image</button>
+            <button class="btn-secondary" id="resetBtn">Crop Another</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+          <button class="btn-primary" id="cropBtn" style="flex:1;background:linear-gradient(135deg,#ef4444,#f97316);">✂️ Crop & Download</button>
+          <button class="btn-secondary" id="resetCropBtn">↺ Reset Selection</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="../js/tools/cropImage.js"></script>
+</body>
+</html>

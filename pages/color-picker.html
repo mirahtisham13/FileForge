@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Color Picker from Image — FileForge</title>
+  <meta name="description" content="Extract colors from any image. Get HEX, RGB, and HSL values instantly."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .cp-layout { display:grid; grid-template-columns:1fr 300px; gap:20px; margin-top:20px; }
+    @media(max-width:800px) { .cp-layout { grid-template-columns:1fr; } }
+    .cp-canvas-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; position:relative; min-height:400px; display:flex; align-items:center; justify-content:center; }
+    #cpCanvas { max-width:100%; cursor:crosshair; }
+    .cp-magnifier { position:absolute; width:100px; height:100px; border:2px solid #fff; border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.3); pointer-events:none; display:none; z-index:10; background-repeat:no-repeat; }
+    .cp-sidebar { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; display:flex; flex-direction:column; gap:20px; }
+    .color-swatch-big { width:100%; height:100px; border-radius:var(--radius-sm); border:1px solid var(--border); box-shadow:inset 0 2px 4px rgba(0,0,0,0.1); transition:background 0.2s; }
+    .color-val-group { display:flex; flex-direction:column; gap:4px; }
+    .color-val-group label { font-size:0.8rem; font-weight:600; color:var(--text-2); text-transform:uppercase; letter-spacing:0.05em; }
+    .color-input-row { display:flex; }
+    .color-input-row input { flex:1; background:var(--bg); border:1px solid var(--border); border-right:none; padding:8px 12px; border-radius:var(--radius-sm) 0 0 var(--radius-sm); color:var(--text); font-family:monospace; font-size:1rem; outline:none; }
+    .color-input-row button { background:var(--surface-2); border:1px solid var(--border); padding:8px 16px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; color:var(--text); cursor:pointer; transition:all 0.2s; font-weight:600; }
+    .color-input-row button:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .palette-grid { display:flex; flex-wrap:wrap; gap:8px; }
+    .palette-item { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s; }
+    .palette-item:hover { transform:scale(1.1); }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Color Picker</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Color Picker</h1>
+          <p class="tool-page-subtitle">Extract colors from an image perfectly. Get HEX, RGB, and HSL codes.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/*"/>
+        <span class="drop-zone-icon">🎨</span>
+        <h3>Drop an image here</h3>
+        <p>Your image is never uploaded to any server</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse Image</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel" style="display:none;padding:0;background:none;border:none;">
+        <div class="cp-layout">
+          <div class="cp-canvas-wrap" id="canvasWrap">
+            <canvas id="cpCanvas"></canvas>
+            <div class="cp-magnifier" id="magnifier"></div>
+          </div>
+          
+          <div class="cp-sidebar">
+            <div class="color-swatch-big" id="currentColor" style="background:#000000;"></div>
+            
+            <div class="color-val-group">
+              <label>HEX</label>
+              <div class="color-input-row">
+                <input type="text" id="valHex" value="#000000" readonly/>
+                <button onclick="copyToClipboard('valHex')">Copy</button>
+              </div>
+            </div>
+            
+            <div class="color-val-group">
+              <label>RGB</label>
+              <div class="color-input-row">
+                <input type="text" id="valRgb" value="rgb(0, 0, 0)" readonly/>
+                <button onclick="copyToClipboard('valRgb')">Copy</button>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size:0.8rem;font-weight:600;color:var(--text-2);text-transform:uppercase;margin-bottom:8px;display:block;">Recent Colors</label>
+              <div class="palette-grid" id="paletteGrid"></div>
+            </div>
+            
+            <button class="btn-secondary" id="resetBtn" style="margin-top:auto;">Upload New Image</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="../js/tools/colorPicker.js"></script>
+  <script>
+    function copyToClipboard(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.value).then(() => {
+        showToast('Copied to clipboard!', 'success');
+      });
+    }
+  </script>
+</body>
+</html>
