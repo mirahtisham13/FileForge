@@ -147,7 +147,7 @@ img { max-width: 100%; }
    ============================================= */
 .hero {
   position: relative;
-  padding: 140px 0 80px;
+  padding: 110px 0 48px;
   overflow: hidden;
   background: var(--hero-bg);
 }
@@ -235,11 +235,11 @@ img { max-width: 100%; }
   background-clip: text;
 }
 .hero-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-2);
-  max-width: 520px;
-  margin: 0 auto 40px;
-  line-height: 1.7;
+  max-width: 460px;
+  margin: 0 auto;
+  line-height: 1.65;
 }
 .hero-stats {
   display: flex;
