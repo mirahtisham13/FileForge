@@ -6,6 +6,13 @@
 
   const { setupDropZone, readFileAsArrayBuffer, downloadBlob } = FFUtils;
 
+  // docx library exposes itself as window.docx via the UMD build
+  if (typeof docx === 'undefined') {
+    console.error('docx library not loaded. Check CDN URL.');
+    showToast('Word library failed to load. Check internet connection.', 'error');
+    return;
+  }
+
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
   const actionPanel = document.getElementById('actionPanel');
