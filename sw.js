@@ -2,7 +2,7 @@
 // Strategy: Network-first for everything (always try live, fall back to cache)
 // This prevents the "page not available" error when cache is stale or incomplete.
 
-const CACHE_NAME = 'fileforge-v6';
+const CACHE_NAME = 'fileforge-v7';
 
 const ASSETS = [
   '/',
@@ -36,6 +36,7 @@ const ASSETS = [
   '/pages/metadata-viewer.html',
   '/pages/extract-pdf.html',
   '/pages/pdf-to-text.html',
+  '/pages/pdf-to-word.html',
   '/pages/zip-extractor.html',
   '/pages/blur-image.html',
   '/pages/remove-background.html',
@@ -68,6 +69,7 @@ const ASSETS = [
   '/js/tools/metadataViewer.js',
   '/js/tools/extractPdf.js',
   '/js/tools/pdfToText.js',
+  '/js/tools/pdfToWord.js',
   '/js/tools/zipExtractor.js',
   '/js/tools/blurImage.js',
   '/js/tools/removeBackground.js',
