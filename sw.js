@@ -2,7 +2,7 @@
 // Strategy: Network-first for everything (always try live, fall back to cache)
 // This prevents the "page not available" error when cache is stale or incomplete.
 
-const CACHE_NAME = 'fileforge-v5';
+const CACHE_NAME = 'fileforge-v6';
 
 const ASSETS = [
   '/',
@@ -19,7 +19,6 @@ const ASSETS = [
   '/pages/merge.html',
   '/pages/split.html',
   '/pages/compress.html',
-  '/pages/pdf-to-images.html',
   '/pages/images-to-pdf.html',
   '/pages/rotate.html',
   '/pages/rearrange.html',
@@ -52,7 +51,6 @@ const ASSETS = [
   '/js/tools/merge.js',
   '/js/tools/split.js',
   '/js/tools/compress.js',
-  '/js/tools/pdfToImages.js',
   '/js/tools/imagesToPdf.js',
   '/js/tools/rotate.js',
   '/js/tools/rearrange.js',

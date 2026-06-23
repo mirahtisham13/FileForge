@@ -1,5 +1,6 @@
 // FileForge — Extract PDF Pages Tool
-// Uses pdf.js to render page previews and pdf-lib to extract selected pages into a new document
+// Uses pdf.js to render page previews and extract images.
+// Uses pdf-lib to extract selected pages into a new PDF document.
 
 (function () {
   'use strict';
@@ -12,6 +13,7 @@
   let pdfLibDoc = null;
   let selectedPages = new Set();
   let resultBlob = null;
+  let resultFileName = '';
 
   const dropZone       = document.getElementById('dropZone');
   const fileInput      = document.getElementById('fileInput');
@@ -20,6 +22,12 @@
   const selectionCount = document.getElementById('selectionCount');
   const btnSelectAll   = document.getElementById('btnSelectAll');
   const btnDeselectAll = document.getElementById('btnDeselectAll');
+  
+  const outFormat      = document.getElementById('outFormat');
+  const imageSettings  = document.getElementById('imageSettings');
+  const imgFormat      = document.getElementById('imgFormat');
+  const imgScale       = document.getElementById('imgScale');
+
   const extractBtn     = document.getElementById('extractBtn');
   const progressWrap   = document.getElementById('progressWrap');
   const progressMsg    = document.getElementById('progressMsg');
@@ -31,6 +39,17 @@
   const resetBtn       = document.getElementById('resetBtn');
 
   setupDropZone(dropZone, fileInput, handleFile, { multiple: false, accept: '.pdf' });
+
+  // Toggle settings visibility based on output format
+  outFormat.addEventListener('change', () => {
+    if (outFormat.value === 'image') {
+      imageSettings.style.display = 'flex';
+      extractBtn.textContent = '🖼️ Extract as Images';
+    } else {
+      imageSettings.style.display = 'none';
+      extractBtn.textContent = '✂️ Extract Selected Pages';
+    }
+  });
 
   async function handleFile(files) {
     const f = files[0];
@@ -139,39 +158,105 @@
     
     extractBtn.disabled = true;
     extractBtn.textContent = 'Extracting...';
+    progressWrap.style.display = 'block';
     
     try {
-      const newPdf = await PDFDocument.create();
+      const sortedIndices = Array.from(selectedPages).sort((a,b) => a - b);
       
-      // pdf-lib indices are 0-based, our UI is 1-based
-      const sortedIndices = Array.from(selectedPages).map(p => p - 1).sort((a,b) => a - b);
+      if (outFormat.value === 'pdf') {
+        // Extract as PDF
+        progressMsg.textContent = 'Creating new PDF...';
+        progressFill.style.width = '50%';
+        progressPct.textContent = '50%';
+
+        const newPdf = await PDFDocument.create();
+        const indices0 = sortedIndices.map(p => p - 1);
+        const copiedPages = await newPdf.copyPages(pdfLibDoc, indices0);
+        copiedPages.forEach(page => newPdf.addPage(page));
+        
+        const bytes = await newPdf.save();
+        resultBlob = new Blob([bytes], { type: 'application/pdf' });
+        resultFileName = currentFile.name.replace('.pdf', '') + '-extracted.pdf';
+        
+        progressFill.style.width = '100%';
+        progressPct.textContent = '100%';
+        resultInfo.textContent = `Extracted ${selectedPages.size} pages · ${formatBytes(resultBlob.size)}`;
+        downloadBtn.textContent = '⬇️ Download PDF';
+
+      } else {
+        // Extract as Images
+        const scale = parseFloat(imgScale.value);
+        const format = imgFormat.value;
+        const ext = format === 'jpeg' ? 'jpg' : 'png';
+        const mimeType = 'image/' + format;
+        
+        let imageBlobs = [];
+        
+        for (let i = 0; i < sortedIndices.length; i++) {
+          const pageNum = sortedIndices[i];
+          progressMsg.textContent = `Rendering page ${pageNum} (${i+1} of ${sortedIndices.length})...`;
+          const pct = Math.round(((i) / sortedIndices.length) * 100);
+          progressFill.style.width = `${pct}%`;
+          progressPct.textContent = `${pct}%`;
+
+          const page = await pdfJsDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+
+          // White background for JPG
+          if (format === 'jpeg') {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          const blob = await new Promise(res => canvas.toBlob(res, mimeType, 0.92));
+          imageBlobs.push({ name: `page-${pageNum}.${ext}`, blob });
+        }
+        
+        progressMsg.textContent = 'Zipping images...';
+        progressFill.style.width = '100%';
+        progressPct.textContent = '100%';
+
+        if (imageBlobs.length === 1) {
+          resultBlob = imageBlobs[0].blob;
+          resultFileName = currentFile.name.replace('.pdf', '') + `-page-${sortedIndices[0]}.${ext}`;
+          downloadBtn.textContent = '⬇️ Download Image';
+        } else {
+          const zip = new JSZip();
+          imageBlobs.forEach(({ name, blob }) => zip.file(name, blob));
+          resultBlob = await zip.generateAsync({ type: 'blob' });
+          resultFileName = currentFile.name.replace('.pdf', '') + '-images.zip';
+          downloadBtn.textContent = '⬇️ Download All Images (ZIP)';
+        }
+        
+        resultInfo.textContent = `Converted ${selectedPages.size} pages to ${ext.toUpperCase()}`;
+      }
       
-      const copiedPages = await newPdf.copyPages(pdfLibDoc, sortedIndices);
-      copiedPages.forEach(page => newPdf.addPage(page));
-      
-      const bytes = await newPdf.save();
-      resultBlob = new Blob([bytes], { type: 'application/pdf' });
-      
-      resultInfo.textContent = `Extracted ${selectedPages.size} pages · ${formatBytes(resultBlob.size)}`;
+      setTimeout(() => { progressWrap.style.display = 'none'; }, 400);
       resultPanel.classList.add('visible');
       extractBtn.style.display = 'none';
       pageGrid.style.opacity = '0.5';
       pageGrid.style.pointerEvents = 'none';
       
-      showToast('Pages extracted successfully! 🎉', 'success');
+      showToast('Extraction successful! 🎉', 'success');
       
     } catch (e) {
-      showToast('Error extracting pages', 'error');
+      console.error(e);
+      showToast('Error extracting pages: ' + e.message, 'error');
+      progressWrap.style.display = 'none';
     }
     
     extractBtn.disabled = false;
-    extractBtn.textContent = '✂️ Extract Selected Pages';
+    extractBtn.textContent = outFormat.value === 'image' ? '🖼️ Extract as Images' : '✂️ Extract Selected Pages';
   });
 
   downloadBtn.addEventListener('click', () => {
-    if (resultBlob && currentFile) {
-      const name = currentFile.name.replace('.pdf', '') + '-extracted.pdf';
-      downloadBlob(resultBlob, name);
+    if (resultBlob && resultFileName) {
+      downloadBlob(resultBlob, resultFileName);
     }
   });
 
@@ -182,6 +267,7 @@
     pdfJsDoc = null;
     pdfLibDoc = null;
     resultBlob = null;
+    resultFileName = '';
     selectedPages.clear();
     pageGrid.innerHTML = '';
     pageGrid.style.opacity = '1';
@@ -191,6 +277,7 @@
     resultPanel.classList.remove('visible');
     extractBtn.style.display = '';
     dropZone.style.display = '';
+    progressWrap.style.display = 'none';
   }
 
 })();

@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Extract PDF Pages — FileForge</title>
-  <meta name="description" content="Extract specific pages from a PDF document to create a new PDF. Free online tool."/>
+  <meta name="description" content="Extract specific pages from a PDF document to create a new PDF or save them as images. Free online tool."/>
   <meta name="theme-color" content="#6c63ff"/>
   <link rel="manifest" href="../manifest.json"/>
   <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
@@ -80,7 +80,7 @@
         </div>
         <div>
           <h1 class="tool-page-title">Extract PDF Pages</h1>
-          <p class="tool-page-subtitle">Select specific pages to extract into a new PDF document.</p>
+          <p class="tool-page-subtitle">Select specific pages to extract into a new PDF document or download as images.</p>
         </div>
       </div>
 
@@ -103,7 +103,35 @@
 
         <div class="page-grid" id="pageGrid"></div>
         
-        <div class="progress-wrap" id="progressWrap" style="margin-top:16px;">
+        <div class="options-row" style="margin-top:24px; align-items:center;">
+          <div class="option-group" style="max-width: 300px;">
+            <label for="outFormat">Extract As</label>
+            <select id="outFormat">
+              <option value="pdf">PDF Document</option>
+              <option value="image">Images (JPG/PNG)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="options-row" id="imageSettings" style="display:none; margin-top:12px;">
+          <div class="option-group">
+            <label for="imgFormat">Image Format</label>
+            <select id="imgFormat">
+              <option value="jpeg">JPG (smaller size)</option>
+              <option value="png">PNG (better quality)</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="imgScale">Resolution</label>
+            <select id="imgScale">
+              <option value="1">72 DPI (screen)</option>
+              <option value="2" selected>150 DPI (standard)</option>
+              <option value="3">216 DPI (high quality)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="progress-wrap" id="progressWrap" style="margin-top:20px;">
           <div class="progress-label">
             <span class="msg" id="progressMsg">Extracting pages...</span>
             <span class="pct" id="progressPct">0%</span>
@@ -112,15 +140,15 @@
         </div>
 
         <div class="result-panel" id="resultPanel" style="margin-top:20px;">
-          <h4>✅ PDF Extracted!</h4>
+          <h4>✅ Extraction Complete!</h4>
           <p id="resultInfo"></p>
           <div class="result-actions">
-            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download New PDF</button>
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download</button>
             <button class="btn-secondary" id="resetBtn">Extract Another</button>
           </div>
         </div>
         
-        <button class="btn-primary" id="extractBtn" style="margin-top:20px;" disabled>✂️ Extract Selected Pages</button>
+        <button class="btn-primary" id="extractBtn" style="margin-top:24px;" disabled>✂️ Extract Selected Pages</button>
       </div>
     </div>
   </main>
@@ -139,6 +167,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="../js/pdfUtils.js"></script>
   <script src="../js/tools/extractPdf.js"></script>
 </body>
