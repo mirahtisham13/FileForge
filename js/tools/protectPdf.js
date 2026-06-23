@@ -1,10 +1,6 @@
-// FileForge — Password Protect PDF (v3)
-// 
-// Strategy: Use pdf.js to render each page to canvas, then use jsPDF
-// (which has built-in working RC4/AES encryption) to create a new
-// password-protected PDF from those rendered pages.
-//
-// jsPDF encryption docs: https://artskydj.github.io/jsPDF/docs/jsPDF.html
+// FileForge — Password Protect PDF (v4 — Final)
+// Uses pdf-encrypt-lite (by PDFSmaller.com, MIT) for real RC4-128 bit encryption
+// The library works directly with pdf-lib's object model to add proper /Encrypt dict
 
 (function () {
   'use strict';
@@ -59,90 +55,41 @@
     const pwd  = pdfPassword.value;
     const cpwd = confirmPassword.value;
 
-    if (!pwd)          { showToast('Please enter a password', 'error'); pdfPassword.focus(); return; }
-    if (pwd.length < 4){ showToast('Password must be at least 4 characters', 'error'); return; }
+    if (!pwd)            { showToast('Please enter a password', 'error'); pdfPassword.focus(); return; }
+    if (pwd.length < 4)  { showToast('Password must be at least 4 characters', 'error'); return; }
     if (cpwd && cpwd !== pwd) { showToast('Passwords do not match!', 'error'); confirmPassword.focus(); return; }
 
-    // Ensure jsPDF is loaded
-    if (typeof window.jspdf === 'undefined' && typeof window.jsPDF === 'undefined') {
-      showToast('PDF library not loaded yet. Please wait a moment and try again.', 'error');
+    if (!window.PdfEncryptLite) {
+      showToast('Encryption library not loaded. Please refresh the page.', 'error');
       return;
     }
 
     protectBtn.disabled = true;
     protectBtn.textContent = '🔒 Encrypting...';
     progressWrap.style.display = 'block';
-    progressFill.style.width = '5%';
+    progressFill.style.width = '30%';
     progressMsg.textContent = 'Loading PDF...';
     resultBlob = null;
 
     try {
       const buf = await readFileAsArrayBuffer(currentFile);
-      const pdfData = new Uint8Array(buf);
+      const pdfBytes = new Uint8Array(buf);
 
-      progressMsg.textContent = 'Reading pages...';
-      progressFill.style.width = '15%';
+      progressFill.style.width = '60%';
+      progressMsg.textContent = 'Encrypting with RC4-128...';
 
-      const pdfjsDoc = await pdfjsLib.getDocument({ data: pdfData }).promise;
-      const numPages = pdfjsDoc.numPages;
-
-      // Get jsPDF constructor (handles both module styles)
-      const { jsPDF } = window.jspdf || window;
-
-      // Determine page size from first page
-      const firstPage = await pdfjsDoc.getPage(1);
-      const firstVp   = firstPage.getViewport({ scale: 1 });
-      const isLandscape = firstVp.width > firstVp.height;
-
-      // Create jsPDF with encryption
-      const doc = new jsPDF({
-        orientation: isLandscape ? 'landscape' : 'portrait',
-        unit: 'pt',
-        format: [firstVp.width, firstVp.height],
-        encryption: {
-          userPassword:    pwd,
-          ownerPassword:   pwd + '_ff_owner',
-          userPermissions: ['print']  // allow printing but restrict copy/modify
-        }
-      });
-
-      for (let i = 1; i <= numPages; i++) {
-        const pct = 15 + ((i - 1) / numPages) * 75;
-        progressFill.style.width = pct + '%';
-        progressMsg.textContent  = `Processing page ${i} of ${numPages}...`;
-
-        const page     = await pdfjsDoc.getPage(i);
-        const scale    = 2; // 2x for good quality
-        const viewport = page.getViewport({ scale });
-
-        const canvas = document.createElement('canvas');
-        canvas.width  = viewport.width;
-        canvas.height = viewport.height;
-
-        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
-        const imgData = canvas.toDataURL('image/jpeg', 0.92);
-
-        // Add new page for all pages after the first
-        if (i > 1) {
-          const vp1 = page.getViewport({ scale: 1 });
-          doc.addPage([vp1.width, vp1.height], vp1.width > vp1.height ? 'landscape' : 'portrait');
-        }
-
-        // Get current page size in pts
-        const pageVp1 = page.getViewport({ scale: 1 });
-        doc.addImage(imgData, 'JPEG', 0, 0, pageVp1.width, pageVp1.height);
-      }
-
-      progressFill.style.width = '95%';
-      progressMsg.textContent  = 'Saving encrypted PDF...';
-
-      const pdfOutput = doc.output('arraybuffer');
-      resultBlob = new Blob([pdfOutput], { type: 'application/pdf' });
+      const encryptedBytes = await window.PdfEncryptLite.encryptPDF(
+        pdfBytes,
+        pwd,
+        pwd + '_owner'
+      );
 
       progressFill.style.width = '100%';
-      setTimeout(() => { progressWrap.style.display = 'none'; }, 500);
+      progressMsg.textContent = 'Done!';
 
+      resultBlob = new Blob([encryptedBytes], { type: 'application/pdf' });
+
+      setTimeout(() => { progressWrap.style.display = 'none'; }, 400);
       resultInfo.textContent = `PDF protected with password · ${formatBytes(resultBlob.size)}`;
       resultPanel.classList.add('visible');
       protectBtn.style.display = 'none';
