@@ -84,13 +84,19 @@
       <div class="file-list" id="fileList"></div>
 
       <div class="action-panel" id="actionPanel">
-        <div class="option-group" style="max-width: 400px; margin-bottom: 20px;">
+        <div class="option-group" style="max-width: 420px; margin-bottom: 20px;">
           <label for="pdfPassword">Set a Password</label>
           <div class="password-input-wrap">
-            <input type="password" id="pdfPassword" placeholder="Enter secure password" />
+            <input type="password" id="pdfPassword" placeholder="Enter secure password (min 4 chars)" />
             <button class="password-toggle" id="togglePasswordBtn">👁️</button>
           </div>
-          <p style="font-size: 0.8rem; color: var(--text-3); margin-top: 8px;">Make sure to remember your password! It cannot be recovered if forgotten.</p>
+
+          <label for="confirmPassword" style="margin-top:14px; display:block;">Confirm Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="confirmPassword" placeholder="Re-enter password to confirm" />
+          </div>
+
+          <p style="font-size: 0.8rem; color: var(--text-3); margin-top: 10px;">⚠️ Remember your password — it cannot be recovered if forgotten.</p>
         </div>
 
         <div class="result-panel" id="resultPanel" style="margin-top:20px;">
@@ -119,7 +125,6 @@
   <div class="toast" id="toast"></div>
   <script src="../js/app.js"></script>
   <script src="../js/pdfUtils.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="../js/tools/protectPdf.js"></script>
 </body>
 </html>
