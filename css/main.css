@@ -422,6 +422,9 @@ img { max-width: 100%; }
   background: var(--border);
   flex-shrink: 0;
 }
+.hero-strip {
+  margin-top: 28px;
+}
 
 /* =============================================
    FOOTER
