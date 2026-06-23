@@ -146,13 +146,61 @@
   });
 
   const uploadSigBtn = document.getElementById('uploadSigBtn');
+  const removeBgCheck = document.getElementById('removeBgCheck');
+  
   uploadSigBtn.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
-      createOverlay(event.target.result, currentPageIndex);
-      showToast('Image signature added!', 'success');
+      const img = new Image();
+      img.onload = () => {
+        // Downscale massive photos to max 800px to keep PDF size small
+        const MAX_DIM = 800;
+        let w = img.width;
+        let h = img.height;
+        if (w > MAX_DIM || h > MAX_DIM) {
+          const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
+          w = w * ratio;
+          h = h * ratio;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        if (removeBgCheck && removeBgCheck.checked) {
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const data = imgData.data;
+          
+          // Background removal: Convert to transparent if light (paper)
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i+1];
+            const b = data[i+2];
+            const luma = (r*0.299 + g*0.587 + b*0.114);
+            
+            const darkPoint = 130;
+            const lightPoint = 200;
+            
+            if (luma > lightPoint) {
+              data[i+3] = 0; // Transparent
+            } else if (luma < darkPoint) {
+              data[i+3] = 255; // Opaque ink
+            } else {
+              // Smooth fade for anti-aliasing edges
+              data[i+3] = 255 * ((lightPoint - luma) / (lightPoint - darkPoint));
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+        }
+        
+        createOverlay(canvas.toDataURL('image/png'), currentPageIndex);
+        showToast('Image signature added!', 'success');
+      };
+      img.src = event.target.result;
     };
     reader.readAsDataURL(file);
     e.target.value = ''; // reset
