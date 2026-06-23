@@ -70,7 +70,24 @@
   // --- Service Worker ---
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        // Listen for new service worker installation
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // A new version is available and installed
+              const toast = document.getElementById('toast');
+              if (toast) {
+                toast.innerHTML = 'New version available! <button onclick="window.location.reload()" style="margin-left:12px;padding:4px 10px;background:#fff;color:#000;border:none;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.8rem;">Update Now</button>';
+                toast.className = 'toast show success';
+                toast.style.pointerEvents = 'all'; // Ensure button is clickable
+                // Do not auto-hide this toast
+              }
+            }
+          });
+        });
+      }).catch(err => console.error('SW Reg Error:', err));
     });
   }
 
