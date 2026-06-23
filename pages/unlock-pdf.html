@@ -71,6 +71,13 @@
           <p style="font-size: 0.8rem; color: var(--text-3); margin-top: 8px;">We need the current password to decrypt the file. The new file will be saved without a password.</p>
         </div>
 
+        <div id="progressWrap" style="display:none; margin-top:16px;">
+          <div class="progress-label">
+            <span class="msg" id="progressMsg">Decrypting...</span>
+          </div>
+          <div class="progress-bar-bg" style="margin-top:8px;"><div class="progress-bar-fill" id="progressFill"></div></div>
+        </div>
+
         <div class="result-panel" id="resultPanel" style="margin-top:20px;">
           <h4>✅ PDF Unlocked!</h4>
           <p id="resultInfo"></p>
@@ -97,6 +104,8 @@
   <div class="toast" id="toast"></div>
   <script src="../js/app.js"></script>
   <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="../js/tools/unlockPdf.js"></script>
 </body>
