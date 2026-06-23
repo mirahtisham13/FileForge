@@ -172,41 +172,49 @@
         ctx.drawImage(img, 0, 0, w, h);
 
         if (removeBgCheck && removeBgCheck.checked) {
-          const imgData = ctx.getImageData(0, 0, w, h);
-          const data = imgData.data;
+          // Get original pixels
+          const originalData = ctx.getImageData(0, 0, w, h).data;
           
-          // Find dynamic range (min and max luminance) to handle dark/grey photos
-          let minLuma = 255;
-          let maxLuma = 0;
-          for (let i = 0; i < data.length; i += 4) {
-            const luma = data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114;
-            if (luma > maxLuma) maxLuma = luma;
-            if (luma < minLuma) minLuma = luma;
-          }
+          // Create a background map using a heavy blur to find the local paper color
+          // This perfectly handles shadows, uneven lighting, and grey paper
+          ctx.filter = 'blur(40px)';
+          ctx.drawImage(img, 0, 0, w, h);
+          const bgData = ctx.getImageData(0, 0, w, h).data;
           
-          const range = maxLuma - minLuma;
-          // Background is usually the brightest part of the image (top 15%)
-          const lightPoint = maxLuma - range * 0.15;
-          // Ink is the darkest part (bottom 50%)
-          const darkPoint = minLuma + range * 0.50;
+          // Prepare output
+          ctx.filter = 'none';
+          const outImgData = ctx.createImageData(w, h);
+          const outData = outImgData.data;
           
-          // Background removal: Convert to transparent if light (paper)
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i+1];
-            const b = data[i+2];
-            const luma = (r*0.299 + g*0.587 + b*0.114);
+          for (let i = 0; i < originalData.length; i += 4) {
+            const r = originalData[i];
+            const g = originalData[i+1];
+            const b = originalData[i+2];
+            const a = originalData[i+3];
+            
+            // Calculate luminance of the current pixel and the local background
+            const luma = r*0.299 + g*0.587 + b*0.114;
+            const bgLuma = bgData[i]*0.299 + bgData[i+1]*0.587 + bgData[i+2]*0.114;
+            
+            // Adaptive threshold relative to the local background brightness
+            const lightPoint = bgLuma - 15; // Anything close to paper color is transparent
+            const darkPoint = bgLuma - 60;  // Anything significantly darker is ink
+            
+            outData[i] = r;
+            outData[i+1] = g;
+            outData[i+2] = b;
             
             if (luma > lightPoint) {
-              data[i+3] = 0; // Transparent
+              outData[i+3] = 0; // Transparent paper
             } else if (luma < darkPoint) {
-              data[i+3] = 255; // Opaque ink
+              outData[i+3] = a; // Opaque ink
             } else {
               // Smooth fade for anti-aliasing edges
-              data[i+3] = 255 * ((lightPoint - luma) / (lightPoint - darkPoint));
+              const ratio = (lightPoint - luma) / (lightPoint - darkPoint);
+              outData[i+3] = a * ratio;
             }
           }
-          ctx.putImageData(imgData, 0, 0);
+          ctx.putImageData(outImgData, 0, 0);
         }
         
         createOverlay(canvas.toDataURL('image/png'), currentPageIndex);
