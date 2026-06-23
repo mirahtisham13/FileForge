@@ -175,15 +175,27 @@
           const imgData = ctx.getImageData(0, 0, w, h);
           const data = imgData.data;
           
+          // Find dynamic range (min and max luminance) to handle dark/grey photos
+          let minLuma = 255;
+          let maxLuma = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            const luma = data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114;
+            if (luma > maxLuma) maxLuma = luma;
+            if (luma < minLuma) minLuma = luma;
+          }
+          
+          const range = maxLuma - minLuma;
+          // Background is usually the brightest part of the image (top 15%)
+          const lightPoint = maxLuma - range * 0.15;
+          // Ink is the darkest part (bottom 50%)
+          const darkPoint = minLuma + range * 0.50;
+          
           // Background removal: Convert to transparent if light (paper)
           for (let i = 0; i < data.length; i += 4) {
             const r = data[i];
             const g = data[i+1];
             const b = data[i+2];
             const luma = (r*0.299 + g*0.587 + b*0.114);
-            
-            const darkPoint = 130;
-            const lightPoint = 200;
             
             if (luma > lightPoint) {
               data[i+3] = 0; // Transparent
