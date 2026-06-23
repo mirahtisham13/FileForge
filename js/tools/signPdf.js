@@ -50,7 +50,6 @@
     sigCtx.strokeStyle = '#000000';
   }
   window.addEventListener('resize', initSigPad);
-  setTimeout(initSigPad, 100);
 
   function getSigPos(e) {
     const rect = sigPad.getBoundingClientRect();
@@ -91,6 +90,9 @@
     currentFile = f;
     dropZone.style.display = 'none';
     actionPanel.style.display = 'block';
+    
+    // IMPORTANT: Initialize canvas only after action panel is visible, so it has proper dimensions
+    setTimeout(initSigPad, 10);
     
     try {
       const buf = await readFileAsArrayBuffer(f);
@@ -141,6 +143,19 @@
     const dataUrl = sigPad.toDataURL('image/png');
     createOverlay(dataUrl, currentPageIndex);
     showToast('Signature added! Drag to move, use corner to resize.', 'success');
+  });
+
+  const uploadSigBtn = document.getElementById('uploadSigBtn');
+  uploadSigBtn.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      createOverlay(event.target.result, currentPageIndex);
+      showToast('Image signature added!', 'success');
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // reset
   });
 
   function createOverlay(src, pageNum) {
@@ -220,7 +235,13 @@
         // Fetch base64 image and embed
         const res = await fetch(imgUrl);
         const imgBuf = await res.arrayBuffer();
-        const pdfImage = await pdfLibDoc.embedPng(imgBuf);
+        
+        let pdfImage;
+        if (imgUrl.startsWith('data:image/jpeg') || imgUrl.startsWith('data:image/jpg')) {
+          pdfImage = await pdfLibDoc.embedJpg(imgBuf);
+        } else {
+          pdfImage = await pdfLibDoc.embedPng(imgBuf);
+        }
         
         const page = pdfLibDoc.getPage(pageNum - 1);
         const { width: pW, height: pH } = page.getSize();

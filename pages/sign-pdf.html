@@ -78,12 +78,16 @@
           <!-- Sidebar -->
           <div class="sidebar">
             <div>
-              <p style="font-weight:600;margin-bottom:10px;">1. Draw Signature</p>
+              <p style="font-weight:600;margin-bottom:10px;">1. Add Signature</p>
               <div class="sig-pad-wrap">
                 <canvas id="sigPad"></canvas>
                 <div class="sig-actions">
                   <button class="btn-secondary" id="clearSigBtn" style="padding:4px 8px;font-size:0.75rem;">Clear</button>
-                  <button class="btn-primary" id="addSigBtn" style="padding:4px 8px;font-size:0.75rem;">Add to PDF</button>
+                  <label class="btn-secondary" style="padding:4px 8px;font-size:0.75rem;cursor:pointer;display:inline-block;margin:0;">
+                    Upload Image
+                    <input type="file" id="uploadSigBtn" accept="image/png, image/jpeg" style="display:none;" />
+                  </label>
+                  <button class="btn-primary" id="addSigBtn" style="padding:4px 8px;font-size:0.75rem;">Add Drawing</button>
                 </div>
               </div>
             </div>
