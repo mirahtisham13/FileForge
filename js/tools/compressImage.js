@@ -12,7 +12,9 @@
   const dropZone     = document.getElementById('dropZone');
   const fileInput    = document.getElementById('fileInput');
   const actionPanel  = document.getElementById('actionPanel');
-  const qualitySelect  = document.getElementById('quality');
+  const qualitySelect= document.getElementById('quality');
+  const targetSize   = document.getElementById('targetSize');
+  const targetUnit   = document.getElementById('targetUnit');
   const outputFormat = document.getElementById('outputFormat');
   const imageCards   = document.getElementById('imageCards');
   const resultPanel  = document.getElementById('resultPanel');
@@ -118,7 +120,34 @@
         }
         ctx.drawImage(img, 0, 0);
 
-        const blob = await new Promise(res => canvas.toBlob(res, mime, quality));
+        let blob = null;
+        const targetVal = parseFloat(targetSize.value);
+
+        if (targetVal > 0) {
+          const tBytes = targetVal * (targetUnit.value === 'mb' ? 1024 * 1024 : 1024);
+          let minQ = 0.05, maxQ = 1.0, currentQ = 0.8;
+          let bestBlob = null;
+          let bestDiff = Infinity;
+          
+          for (let attempt = 0; attempt < 8; attempt++) {
+            currentQ = (minQ + maxQ) / 2;
+            const testBlob = await new Promise(res => canvas.toBlob(res, mime, currentQ));
+            
+            const diff = testBlob.size - tBytes;
+            if (testBlob.size <= tBytes && Math.abs(diff) < bestDiff) {
+              bestBlob = testBlob;
+              bestDiff = Math.abs(diff);
+            }
+
+            if (Math.abs(diff) < (tBytes * 0.05)) { bestBlob = testBlob; break; }
+            if (testBlob.size > tBytes) maxQ = currentQ;
+            else minQ = currentQ;
+          }
+          blob = bestBlob || await new Promise(res => canvas.toBlob(res, mime, 0.05));
+        } else {
+          blob = await new Promise(res => canvas.toBlob(res, mime, quality));
+        }
+
         const ext = getExt(mime);
         const baseName = f.name.replace(/\.[^.]+$/, '');
         results.push({ blob, filename: `${baseName}-compressed.${ext}`, origSize: f.size, newSize: blob.size });
