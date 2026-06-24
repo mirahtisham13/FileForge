@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barcode Generator — FileForge</title>
+  <meta name="description" content="Generate 1D barcodes (Code 128, EAN, UPC, etc.) instantly. Free, private, works offline."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .barcode-container {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 32px; gap: 20px; min-height: 250px; margin-top: 24px;
+      overflow-x: auto;
+    }
+    #barcodeCanvas {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .barcode-input-area { margin-top: 24px; }
+    .barcode-input-area textarea {
+      width: 100%; height: 100px; padding: 16px; border: 1px solid var(--border);
+      border-radius: var(--radius); background: var(--bg); color: var(--text-1);
+      font-size: 1rem; resize: vertical; font-family: inherit; margin-bottom: 16px;
+    }
+    .barcode-input-area textarea:focus { border-color: var(--accent); outline: none; }
+  </style>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Barcode Generator</span></nav>
+      
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Barcode Generator</h1>
+          <p class="tool-page-subtitle">Generate high-quality 1D barcodes instantly. Download as PNG.</p>
+        </div>
+      </div>
+
+      <div class="barcode-input-area">
+        <label for="barcodeData" style="display:block; font-size:0.85rem; font-weight:600; color:var(--text-2); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Barcode Data</label>
+        <textarea id="barcodeData" placeholder="Enter text or numbers to generate a barcode..."></textarea>
+        
+        <div class="options-row">
+          <div class="option-group">
+            <label for="barcodeFormat">Format</label>
+            <select id="barcodeFormat">
+              <option value="CODE128" selected>Code 128 (Standard)</option>
+              <option value="CODE39">Code 39</option>
+              <option value="EAN13">EAN-13 (Product)</option>
+              <option value="EAN8">EAN-8</option>
+              <option value="UPC">UPC-A</option>
+              <option value="ITF14">ITF-14</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="barcodeColor">Line Color</label>
+            <input type="color" id="barcodeColor" value="#000000" style="width:100%; height:40px; border:1px solid var(--border); border-radius:var(--radius); padding:2px; background:none; cursor:pointer;" />
+          </div>
+          <div class="option-group">
+            <label for="displayValue">Show Text</label>
+            <select id="displayValue">
+              <option value="true" selected>Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="barcode-container" id="barcodeContainer">
+        <canvas id="barcodeCanvas"></canvas>
+      </div>
+
+      <div class="result-panel visible" style="margin-top:24px; text-align:center;">
+        <button class="btn-primary" id="downloadBtn" disabled style="width:auto; min-width:200px;">⬇️ Download PNG</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+  <script src="../js/tools/barcodeGenerator.js"></script>
+</body>
+</html>

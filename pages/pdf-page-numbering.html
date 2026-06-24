@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDF Page Numbering — FileForge</title>
+  <meta name="description" content="Add page numbers to your PDF documents. Choose position, style and starting number. Free and private."/>
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>PDF Page Numbering</span></nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.25);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="9" y1="19" x2="15" y2="19"></line>
+            <line x1="12" y1="16" x2="12" y2="22"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">PDF Page Numbering</h1>
+          <p class="tool-page-subtitle">Add page numbers anywhere on your PDF — choose position, format, size and starting number.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept=".pdf"/>
+        <span class="drop-zone-icon">🔢</span>
+        <h3>Drop your PDF here</h3>
+        <p>Private &amp; secure — processed locally</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel">
+
+        <!-- Options -->
+        <div class="options-row">
+          <div class="option-group">
+            <label for="position">Position</label>
+            <select id="position">
+              <option value="bottom-center" selected>Bottom Center</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="top-center">Top Center</option>
+              <option value="top-left">Top Left</option>
+              <option value="top-right">Top Right</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="format">Format</label>
+            <select id="format">
+              <option value="n" selected>1, 2, 3…</option>
+              <option value="page-n">Page 1, Page 2…</option>
+              <option value="n-of-total">1 / 10, 2 / 10…</option>
+              <option value="page-n-of-total">Page 1 of 10…</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="startNum">Start From</label>
+            <input type="number" id="startNum" value="1" min="1" max="9999"/>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <div class="option-group">
+            <label for="fontSize">Font Size (pt)</label>
+            <input type="number" id="fontSize" value="11" min="6" max="36"/>
+          </div>
+          <div class="option-group">
+            <label for="fontColor">Font Color</label>
+            <select id="fontColor">
+              <option value="black" selected>Black</option>
+              <option value="gray">Gray</option>
+              <option value="white">White (for dark PDFs)</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="margin">Margin from edge (pt)</label>
+            <input type="number" id="margin" value="28" min="8" max="80"/>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-label">
+            <span class="msg" id="progressMsg">Numbering pages...</span>
+            <span class="pct" id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+        </div>
+
+        <!-- Result -->
+        <div class="result-panel" id="resultPanel">
+          <h4>✅ Page numbers added!</h4>
+          <p id="resultInfo"></p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download PDF</button>
+            <button class="btn-secondary" id="resetBtn">Number Another</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="applyBtn" style="margin-top:24px;">🔢 Add Page Numbers</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="../js/tools/pdfPageNumbering.js"></script>
+</body>
+</html>

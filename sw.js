@@ -2,7 +2,7 @@
 // Strategy: Network-first for everything (always try live, fall back to cache)
 // This prevents the "page not available" error when cache is stale or incomplete.
 
-const CACHE_NAME = 'fileforge-v7';
+const CACHE_NAME = 'fileforge-v8';
 
 const ASSETS = [
   '/',
@@ -37,6 +37,7 @@ const ASSETS = [
   '/pages/extract-pdf.html',
   '/pages/pdf-to-text.html',
   '/pages/pdf-to-word.html',
+  '/pages/pdf-page-numbering.html',
   '/pages/zip-extractor.html',
   '/pages/blur-image.html',
   '/pages/remove-background.html',
@@ -45,6 +46,7 @@ const ASSETS = [
   '/pages/barcode-scanner.html',
   '/pages/size-calculator.html',
   '/pages/color-picker.html',
+  '/pages/barcode-generator.html',
   '/pages/merge-text.html',
   '/pages/password-generator.html',
 
