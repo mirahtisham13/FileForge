@@ -2,7 +2,7 @@
 // Strategy: Network-first for everything (always try live, fall back to cache)
 // This prevents the "page not available" error when cache is stale or incomplete.
 
-const CACHE_NAME = 'fileforge-v19';
+const CACHE_NAME = 'fileforge-v20';
 
 const ASSETS = [
   '/',
@@ -140,27 +140,40 @@ self.addEventListener('fetch', (event) => {
         }
         return networkRes;
       })
-      .catch(() => {
+      .catch(async () => {
         // Network failed — serve from cache
-        return caches.match(event.request).then(cached => {
+        let cached = await caches.match(event.request, { ignoreSearch: true });
+        if (cached) return cached;
+        
+        // If clean URL, try appending .html to match the cache
+        const urlObj = new URL(event.request.url);
+        if (!urlObj.pathname.includes('.') && !urlObj.pathname.endsWith('/')) {
+          cached = await caches.match(urlObj.pathname + '.html', { ignoreSearch: true });
           if (cached) return cached;
-          // Last resort: return a friendly offline page for HTML requests
-          if (event.request.headers.get('accept')?.includes('text/html')) {
-            return new Response(
-              `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Offline — FileForge</title>
-              <style>body{font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#0f0e17;color:#fff;}
-              .box{text-align:center;padding:40px;}.emoji{font-size:4rem;}.title{font-size:1.5rem;font-weight:700;margin:16px 0 8px;}
-              .sub{color:#888;margin-bottom:24px;}a{color:#6c63ff;}</style></head>
-              <body><div class="box"><div class="emoji">📡</div>
-              <div class="title">You're offline</div>
-              <div class="sub">Connect to the internet to use FileForge tools.</div>
-              <a href="/">Go to Home</a></div></body></html>`,
-              { headers: { 'Content-Type': 'text/html' } }
-            );
-          }
-          // Return empty 503 for other resources
-          return new Response('', { status: 503 });
-        });
+        }
+        
+        // If directory, try index.html
+        if (urlObj.pathname.endsWith('/')) {
+          cached = await caches.match(urlObj.pathname + 'index.html', { ignoreSearch: true });
+          if (cached) return cached;
+        }
+
+        // Last resort: return a friendly offline page for HTML requests
+        if (event.request.headers.get('accept')?.includes('text/html')) {
+          return new Response(
+            `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Offline — FileForge</title>
+            <style>body{font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#0f0e17;color:#fff;}
+            .box{text-align:center;padding:40px;}.emoji{font-size:4rem;}.title{font-size:1.5rem;font-weight:700;margin:16px 0 8px;}
+            .sub{color:#888;margin-bottom:24px;}a{color:#6c63ff;}</style></head>
+            <body><div class="box"><div class="emoji">📡</div>
+            <div class="title">You're offline</div>
+            <div class="sub">Connect to the internet to use FileForge tools.</div>
+            <a href="/">Go to Home</a></div></body></html>`,
+            { headers: { 'Content-Type': 'text/html' } }
+          );
+        }
+        // Return empty 503 for other resources
+        return new Response('', { status: 503 });
       })
   );
 });
