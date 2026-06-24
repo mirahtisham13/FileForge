@@ -120,9 +120,9 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--accent);
-  color: white;
-  border: none;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 8px 16px;
   font-size: 0.9rem;
@@ -130,12 +130,11 @@ img { max-width: 100%; }
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(108,99,255,0.2);
 }
 .install-app-btn:hover {
-  background: var(--accent-light);
+  background: var(--hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(108,99,255,0.3);
+  border-color: var(--accent);
 }
 .install-app-btn svg { width: 16px; height: 16px; }
 
