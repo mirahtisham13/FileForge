@@ -412,6 +412,7 @@ img { max-width: 100%; }
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-2);
+  white-space: nowrap;
 }
 .feature-pill-icon {
   font-size: 1rem;
@@ -864,4 +865,7 @@ img { max-width: 100%; }
   .tool-card { padding: 18px 16px; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
   .install-banner { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+  .feature-pill { font-size: 0.75rem; padding: 4px 10px; gap: 5px; }
+  .feature-pill-icon { font-size: 0.85rem; }
+  .features-strip { padding: 8px 14px; }
 }
