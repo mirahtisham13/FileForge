@@ -42,6 +42,7 @@
       // Configuration for @imgly/background-removal
       // We will use the smaller model for web performance
       const config = {
+        publicPath: 'https://static.imgly.com/@imgly/background-removal-data/1.4.3/dist/',
         model: 'small', // small model is faster and uses less memory
         output: {
           format: 'image/png',
