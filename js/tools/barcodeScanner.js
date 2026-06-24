@@ -11,21 +11,25 @@
   const copyBtn     = document.getElementById('copyBtn');
   const openLinkBtn = document.getElementById('openLinkBtn');
   
-  let html5QrcodeScanner = null;
+  let html5QrCode = null;
 
-  // Initialize on page load (since there's no file input needed)
+  // Initialize on page load
   function initScanner() {
-    html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader",
-      { fps: 10, qrbox: {width: 250, height: 250} },
-      /* verbose= */ false
-    );
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode.start(
+      { facingMode: "environment" }, // strictly use back camera
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      onScanSuccess,
+      onScanFailure
+    ).catch(err => {
+      console.error("Camera start failed:", err);
+      showToast("Camera access denied or no back camera found.", "error");
+    });
   }
 
   function onScanSuccess(decodedText, decodedResult) {
     // Stop scanning once we get a result
-    html5QrcodeScanner.pause();
+    html5QrCode.pause();
     
     resultText.textContent = decodedText;
     formatBadge.textContent = decodedResult.result.format?.formatName || 'SCANNED';
@@ -42,8 +46,8 @@
     // Auto-resume after 5 seconds to scan again
     setTimeout(() => {
       scanResult.style.display = 'none';
-      if (html5QrcodeScanner.getState() === 2 /* PAUSED */) {
-        html5QrcodeScanner.resume();
+      if (html5QrCode.getState() === 2 /* PAUSED */) {
+        html5QrCode.resume();
       }
     }, 5000);
   }
