@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PDF to Word — FileForge</title>
-  <meta name="description" content="Convert PDF documents into editable Microsoft Word (.docx) files. Free offline tool."/>
+  <title>Word &amp; PDF Converter — FileForge</title>
+  <meta name="description" content="Convert PDF documents to Word (.docx) or Word documents to PDF. Free offline tool."/>
   <meta name="theme-color" content="#6c63ff"/>
   <link rel="manifest" href="../manifest.json"/>
   <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
@@ -37,7 +37,7 @@
 
   <main class="page-main">
     <div class="container">
-      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>PDF to Word</span></nav>
+      <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Word &amp; PDF Converter</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.25);">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -47,15 +47,15 @@
           </svg>
         </div>
         <div>
-          <h1 class="tool-page-title">PDF to Word</h1>
-          <p class="tool-page-subtitle">Extract text from your PDF and convert it into an editable Microsoft Word document.</p>
+          <h1 class="tool-page-title">Word &amp; PDF Converter</h1>
+          <p class="tool-page-subtitle">Convert PDFs into Word (.docx) documents, or Word documents into PDFs.</p>
         </div>
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf"/>
-        <span class="drop-zone-icon">📄</span>
-        <h3>Drop your PDF here</h3>
+        <input type="file" id="fileInput" accept=".pdf,.docx"/>
+        <span class="drop-zone-icon">📄 ↔️ 📝</span>
+        <h3>Drop your PDF or Word file here</h3>
         <p>Private & secure — processed locally</p>
         <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse File</button>
       </div>
@@ -73,7 +73,7 @@
           <h4>✅ Conversion Complete!</h4>
           <p id="resultInfo"></p>
           <div class="result-actions">
-            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download DOCX</button>
+            <button class="btn-primary" id="downloadBtn" style="width:auto">⬇️ Download File</button>
             <button class="btn-secondary" id="resetBtn">Convert Another</button>
           </div>
         </div>
@@ -95,6 +95,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="../js/pdfUtils.js"></script>
   <script src="../js/tools/pdfToWord.js"></script>
 </body>

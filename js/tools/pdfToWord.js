@@ -25,7 +25,7 @@
   let resultBlob = null;
   let resultFileName = '';
 
-  setupDropZone(dropZone, fileInput, handleFile, { multiple: false, accept: '.pdf' });
+  setupDropZone(dropZone, fileInput, handleFile, { multiple: false, accept: '.pdf,.docx' });
 
   // ─── DOCX builder helpers ───────────────────────────────────────────────────
 
@@ -113,8 +113,11 @@ ${body}
 
   async function handleFile(files) {
     const f = files[0];
-    if (!f.name.endsWith('.pdf')) {
-      showToast('Please select a PDF file', 'error');
+    const isPdf = f.name.toLowerCase().endsWith('.pdf');
+    const isDocx = f.name.toLowerCase().endsWith('.docx');
+
+    if (!isPdf && !isDocx) {
+      showToast('Please select a PDF or DOCX file', 'error');
       return;
     }
 
@@ -124,63 +127,11 @@ ${body}
     progressMsg.textContent = 'Loading PDF...';
 
     try {
-      const buf = await readFileAsArrayBuffer(f);
-      const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
-      const numPages = pdf.numPages;
-
-      const xmlBlocks = [];
-
-      for (let i = 1; i <= numPages; i++) {
-        progressMsg.textContent = `Extracting page ${i} of ${numPages}...`;
-        const pct = Math.round((i / numPages) * 90);
-        progressPct.textContent = `${pct}%`;
-        progressFill.style.width = `${pct}%`;
-
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-
-        const items = textContent.items.filter(it => it.str && it.str.trim() !== '');
-
-        // Sort by Y desc then X asc to reconstruct reading order
-        items.sort((a, b) => {
-          const yDiff = b.transform[5] - a.transform[5];
-          if (Math.abs(yDiff) < 5) return a.transform[4] - b.transform[4];
-          return yDiff;
-        });
-
-        // Group into lines
-        let currentY = null;
-        let currentLine = [];
-        const lines = [];
-
-        for (const item of items) {
-          const y = item.transform[5];
-          if (currentY === null) {
-            currentY = y;
-            currentLine.push(item.str);
-          } else if (Math.abs(currentY - y) < 5) {
-            currentLine.push(item.str);
-          } else {
-            lines.push(currentLine.join(' '));
-            currentY = y;
-            currentLine = [item.str];
-          }
-        }
-        if (currentLine.length > 0) lines.push(currentLine.join(' '));
-
-        for (const line of lines) {
-          xmlBlocks.push(makeParagraph(line));
-        }
-
-        if (i < numPages) xmlBlocks.push(makePageBreak());
+      if (isPdf) {
+        await convertPdfToDocx(buf, f.name);
+      } else {
+        await convertDocxToPdf(buf, f.name);
       }
-
-      progressMsg.textContent = 'Building Word document...';
-      progressPct.textContent = '95%';
-      progressFill.style.width = '95%';
-
-      resultBlob = await buildDocx(xmlBlocks);
-      resultFileName = f.name.replace(/\.pdf$/i, '') + '.docx';
 
       progressPct.textContent = '100%';
       progressFill.style.width = '100%';
@@ -195,6 +146,131 @@ ${body}
       showToast('Error: ' + e.message, 'error');
       resetState();
     }
+  }
+
+  // ─── Converters ──────────────────────────────────────────────────────────────
+
+  async function convertPdfToDocx(buf, name) {
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+    const numPages = pdf.numPages;
+    const xmlBlocks = [];
+
+    for (let i = 1; i <= numPages; i++) {
+      progressMsg.textContent = `Extracting page ${i} of ${numPages}...`;
+      const pct = Math.round((i / numPages) * 90);
+      progressPct.textContent = `${pct}%`;
+      progressFill.style.width = `${pct}%`;
+
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const items = textContent.items.filter(it => it.str && it.str.trim() !== '');
+
+      items.sort((a, b) => {
+        const yDiff = b.transform[5] - a.transform[5];
+        if (Math.abs(yDiff) < 5) return a.transform[4] - b.transform[4];
+        return yDiff;
+      });
+
+      let currentY = null;
+      let currentLine = [];
+      const lines = [];
+
+      for (const item of items) {
+        const y = item.transform[5];
+        if (currentY === null) {
+          currentY = y;
+          currentLine.push(item.str);
+        } else if (Math.abs(currentY - y) < 5) {
+          currentLine.push(item.str);
+        } else {
+          lines.push(currentLine.join(' '));
+          currentY = y;
+          currentLine = [item.str];
+        }
+      }
+      if (currentLine.length > 0) lines.push(currentLine.join(' '));
+
+      for (const line of lines) { xmlBlocks.push(makeParagraph(line)); }
+      if (i < numPages) xmlBlocks.push(makePageBreak());
+    }
+
+    progressMsg.textContent = 'Building Word document...';
+    progressPct.textContent = '95%';
+    progressFill.style.width = '95%';
+
+    resultBlob = await buildDocx(xmlBlocks);
+    resultFileName = name.replace(/\.pdf$/i, '') + '.docx';
+    resultInfo.textContent = `Converted ${numPages} page${numPages !== 1 ? 's' : ''} → Word document ready.`;
+    downloadBtn.textContent = '⬇️ Download DOCX';
+  }
+
+  async function convertDocxToPdf(buf, name) {
+    progressMsg.textContent = 'Parsing Word Document...';
+    progressPct.textContent = '30%';
+    progressFill.style.width = '30%';
+
+    const result = await mammoth.extractRawText({ arrayBuffer: buf });
+    const text = result.value;
+
+    progressMsg.textContent = 'Generating PDF...';
+    progressPct.textContent = '60%';
+    progressFill.style.width = '60%';
+
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontSize = 12;
+    const margin = 50;
+    
+    let page = pdfDoc.addPage();
+    let { width, height } = page.getSize();
+    const maxW = width - (margin * 2);
+    let cursorY = height - margin;
+
+    const paragraphs = text.split('\n');
+
+    for (const p of paragraphs) {
+      if (!p.trim()) {
+        cursorY -= fontSize * 1.5;
+        if (cursorY < margin) { page = pdfDoc.addPage(); cursorY = height - margin; }
+        continue;
+      }
+      
+      const words = p.split(' ');
+      let line = '';
+      
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const testW = font.widthOfTextAtSize(testLine, fontSize);
+        
+        if (testW > maxW && i > 0) {
+          if (cursorY < margin) { page = pdfDoc.addPage(); cursorY = height - margin; }
+          page.drawText(line, { x: margin, y: cursorY, size: fontSize, font, color: rgb(0,0,0) });
+          cursorY -= fontSize * 1.5;
+          line = words[i] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      
+      if (line.trim()) {
+        if (cursorY < margin) { page = pdfDoc.addPage(); cursorY = height - margin; }
+        page.drawText(line, { x: margin, y: cursorY, size: fontSize, font, color: rgb(0,0,0) });
+        cursorY -= fontSize * 1.5;
+      }
+      cursorY -= fontSize * 0.5; // Paragraph spacing
+    }
+
+    progressPct.textContent = '90%';
+    progressFill.style.width = '90%';
+    
+    const pdfBytes = await pdfDoc.save();
+    resultBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    resultFileName = name.replace(/\.docx$/i, '') + '.pdf';
+    
+    const numPages = pdfDoc.getPageCount();
+    resultInfo.textContent = `Generated ${numPages} page PDF from Word document.`;
+    downloadBtn.textContent = '⬇️ Download PDF';
   }
 
   downloadBtn.addEventListener('click', () => {
