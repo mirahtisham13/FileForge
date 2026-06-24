@@ -76,10 +76,10 @@
     const { x, y, w, h } = cropRect;
     if (w < 4 || h < 4) { cropBox.style.display = 'none'; return; }
     cropBox.style.display = 'block';
-    cropBox.style.left = x + 'px';
-    cropBox.style.top = y + 'px';
-    cropBox.style.width = w + 'px';
-    cropBox.style.height = h + 'px';
+    cropBox.style.left = (x / cropCanvas.width * 100) + '%';
+    cropBox.style.top = (y / cropCanvas.height * 100) + '%';
+    cropBox.style.width = (w / cropCanvas.width * 100) + '%';
+    cropBox.style.height = (h / cropCanvas.height * 100) + '%';
     cropInfoBar.style.display = 'flex';
     updateInfoBar();
   }
@@ -123,22 +123,15 @@
   // ── Pointer Events ──
   function getRelPos(e) {
     const rect = cropWorkspace.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return { x: clientX - rect.left, y: clientY - rect.top };
+    const scaleX = cropCanvas.width / rect.width;
+    const scaleY = cropCanvas.height / rect.height;
+    return { 
+      x: (e.clientX - rect.left) * scaleX, 
+      y: (e.clientY - rect.top) * scaleY 
+    };
   }
 
   function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
-
-  // Draw new crop by dragging on canvas
-  cropWorkspace.addEventListener('pointerdown', (e) => {
-    if (e.target === cropBox || e.target.classList.contains('crop-handle')) return;
-    const pos = getRelPos(e);
-    isDrawing = true;
-    dragState = { type: 'draw', startX: pos.x, startY: pos.y };
-    cropBox.style.display = 'none';
-    e.preventDefault();
-  });
 
   // Move crop box
   cropBox.addEventListener('pointerdown', (e) => {
@@ -166,18 +159,7 @@
     const dx = pos.x - dragState.startX;
     const dy = pos.y - dragState.startY;
 
-    if (dragState.type === 'draw') {
-      let x = Math.min(dragState.startX, pos.x);
-      let y = Math.min(dragState.startY, pos.y);
-      let w = Math.abs(dx);
-      let h = Math.abs(dy);
-      if (aspectRatio) h = w / aspectRatio;
-      x = clamp(x, 0, cropCanvas.width - w);
-      y = clamp(y, 0, cropCanvas.height - h);
-      w = clamp(w, 4, cropCanvas.width - x);
-      h = clamp(h, 4, cropCanvas.height - y);
-      cropRect = { x, y, w, h };
-    } else if (dragState.type === 'move') {
+    if (dragState.type === 'move') {
       const or = dragState.origRect;
       cropRect.x = clamp(or.x + dx, 0, cropCanvas.width - or.w);
       cropRect.y = clamp(or.y + dy, 0, cropCanvas.height - or.h);
@@ -198,7 +180,6 @@
   });
 
   function endDrag() {
-    if (dragState?.type === 'draw') isDrawing = false;
     dragState = null;
   }
   window.addEventListener('pointerup', endDrag);
