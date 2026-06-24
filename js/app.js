@@ -74,7 +74,6 @@
 
   if (installBtn) installBtn.addEventListener('click', handleInstallClick);
   if (navInstallBtn) navInstallBtn.addEventListener('click', handleInstallClick);
-  }
   if (dismissBtn) {
     dismissBtn.addEventListener('click', () => {
       installBanner.classList.remove('show');
