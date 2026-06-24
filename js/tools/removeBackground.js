@@ -76,7 +76,7 @@
     } catch (e) {
       loaderArea.style.display = 'none';
       loadingText.textContent = 'Failed to remove background.';
-      showToast('Error removing background. Your browser might not support this feature or you are out of memory.', 'error');
+      showToast('Error: ' + (e.message || e), 'error');
       console.error(e);
     }
   }
