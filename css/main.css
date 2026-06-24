@@ -116,6 +116,34 @@ img { max-width: 100%; }
 
 .nav-actions { display: flex; align-items: center; gap: 12px; }
 
+.install-app-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(108,99,255,0.2);
+}
+.install-app-btn:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108,99,255,0.3);
+}
+.install-app-btn svg { width: 16px; height: 16px; }
+
+@media (max-width: 480px) {
+  .install-text { display: none; }
+  .install-app-btn { padding: 8px; border-radius: 50%; width: 42px; height: 42px; justify-content: center; }
+}
+
 .theme-toggle {
   width: 42px;
   height: 42px;

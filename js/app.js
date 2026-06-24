@@ -40,7 +40,18 @@
   let deferredPrompt = null;
   const installBanner = document.getElementById('installBanner');
   const installBtn = document.getElementById('installBtn');
+  const navInstallBtn = document.getElementById('navInstallBtn');
   const dismissBtn = document.getElementById('dismissInstall');
+
+  // Check if already installed
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (isStandalone && navInstallBtn) {
+    navInstallBtn.style.display = 'none';
+  }
+
+  window.addEventListener('appinstalled', () => {
+    if (navInstallBtn) navInstallBtn.style.display = 'none';
+  });
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -49,16 +60,20 @@
       setTimeout(() => installBanner.classList.add('show'), 3000);
     }
   });
-  if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') showToast('FileForge installed! 🎉', 'success');
-        deferredPrompt = null;
-        installBanner.classList.remove('show');
-      }
-    });
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') showToast('FileForge installed! 🎉', 'success');
+      deferredPrompt = null;
+      if (installBanner) installBanner.classList.remove('show');
+    } else {
+      showToast('To install, tap your browser menu or Share icon, then select "Add to Home Screen".', 'info');
+    }
+  };
+
+  if (installBtn) installBtn.addEventListener('click', handleInstallClick);
+  if (navInstallBtn) navInstallBtn.addEventListener('click', handleInstallClick);
   }
   if (dismissBtn) {
     dismissBtn.addEventListener('click', () => {

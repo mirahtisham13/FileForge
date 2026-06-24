@@ -2,7 +2,7 @@
 // Strategy: Network-first for everything (always try live, fall back to cache)
 // This prevents the "page not available" error when cache is stale or incomplete.
 
-const CACHE_NAME = 'fileforge-v20';
+const CACHE_NAME = 'fileforge-v21';
 
 const ASSETS = [
   '/',
