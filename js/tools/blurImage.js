@@ -198,9 +198,11 @@
       ctx.drawImage(region, x, y);
     } else {
       // Pixelate
-      const pSize = intensity / 100; // 0.05 to 0.5
-      const smW = w * pSize;
-      const smH = h * pSize;
+      // Intensity 5-50. Higher intensity = bigger blocks = smaller canvas
+      // Let's make the intermediate canvas size w / (intensity / 2).
+      const blockScale = Math.max(1, intensity / 2);
+      const smW = Math.max(1, Math.ceil(w / blockScale));
+      const smH = Math.max(1, Math.ceil(h / blockScale));
       
       const small = document.createElement('canvas');
       small.width = smW;

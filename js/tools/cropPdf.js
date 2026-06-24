@@ -62,11 +62,13 @@
         const page = pages[i];
         const { width, height } = page.getSize();
         
-        // Calculate new crop box
-        const newX = mL;
-        const newY = mB;
-        const newW = width - mL - mR;
-        const newH = height - mT - mB;
+        // Calculate new crop box based on current box
+        const cropBox = page.getCropBox() || page.getMediaBox() || { x:0, y:0, width: width, height: height };
+        
+        const newX = cropBox.x + mL;
+        const newY = cropBox.y + mB;
+        const newW = cropBox.width - mL - mR;
+        const newH = cropBox.height - mT - mB;
         
         // Don't crop if invalid margins (e.g., overlapping)
         if (newW > 0 && newH > 0) {
