@@ -12,8 +12,7 @@
   const dropZone     = document.getElementById('dropZone');
   const fileInput    = document.getElementById('fileInput');
   const actionPanel  = document.getElementById('actionPanel');
-  const qualitySlider= document.getElementById('qualitySlider');
-  const qualityVal   = document.getElementById('qualityVal');
+  const qualitySelect  = document.getElementById('quality');
   const outputFormat = document.getElementById('outputFormat');
   const imageCards   = document.getElementById('imageCards');
   const resultPanel  = document.getElementById('resultPanel');
@@ -22,9 +21,7 @@
   const resetBtn     = document.getElementById('resetBtn');
   const compressBtn  = document.getElementById('compressBtn');
 
-  qualitySlider.addEventListener('input', () => {
-    qualityVal.textContent = qualitySlider.value + '%';
-  });
+
 
   setupDropZone(dropZone, fileInput, handleFiles, {
     multiple: true,
@@ -102,7 +99,7 @@
     compressBtn.textContent = 'Compressing...';
     results = [];
 
-    const quality = parseInt(qualitySlider.value) / 100;
+    const quality = parseFloat(qualitySelect.value);
 
     for (let i = 0; i < files.length; i++) {
       const f = files[i];

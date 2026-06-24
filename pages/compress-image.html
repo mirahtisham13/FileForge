@@ -56,22 +56,8 @@
       object-fit: contain;
       border-radius: 4px;
     }
-    .quality-slider-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .quality-slider-wrap input[type=range] {
-      width: 100%;
-      accent-color: var(--accent);
-      cursor: pointer;
-    }
-    .slider-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-3);
-    }
+
+
     .saving-badge {
       display: inline-block;
       padding: 3px 10px;
@@ -141,10 +127,13 @@
 
       <div class="action-panel" id="actionPanel">
         <div class="options-row">
-          <div class="option-group quality-slider-wrap" style="flex:2;">
-            <label>Quality: <strong id="qualityVal">80%</strong></label>
-            <input type="range" id="qualitySlider" min="10" max="100" value="80" step="5"/>
-            <div class="slider-labels"><span>Max compress</span><span>Best quality</span></div>
+          <div class="option-group" style="flex:1; min-width:200px;">
+            <label for="quality">Compression Level</label>
+            <select id="quality">
+              <option value="0.85">High Quality (mild compression)</option>
+              <option value="0.6" selected>Balanced (recommended)</option>
+              <option value="0.3">Max Compression (smallest size)</option>
+            </select>
           </div>
           <div class="option-group">
             <label for="outputFormat">Output Format</label>
