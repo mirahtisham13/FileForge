@@ -62,13 +62,42 @@
       }
     }
 
+    // Clean string for standard decoding
+    const cleanB64 = b64.replace(/\s+/g, '');
+
     // Normal Text decode
+    let raw;
     try {
-      textInput.value = decodeURIComponent(escape(atob(b64)));
+      raw = atob(cleanB64);
+    } catch (e) {
+      showToast('Invalid Base64 string', 'error');
+      return;
+    }
+
+    try {
+      // Try parsing as UTF-8 text
+      textInput.value = decodeURIComponent(escape(raw));
       downloadFileBtn.style.display = 'none';
       showToast('Decoded to text', 'success');
     } catch (e) {
-      showToast('Invalid Base64 string', 'error');
+      // If it fails UTF-8 decoding, it's likely a raw binary file!
+      const u8 = new Uint8Array(raw.length);
+      for(let i=0; i<raw.length; i++) u8[i] = raw.charCodeAt(i);
+      const blob = new Blob([u8], {type: 'application/octet-stream'});
+      const url = URL.createObjectURL(blob);
+      
+      textInput.value = `[Binary Data Decoded]\nSize: ${blob.size} bytes\n\nThis Base64 string contains binary data (not readable text).\nUse the "Download Decoded File" button to save it.`;
+      
+      downloadFileBtn.style.display = 'inline-block';
+      downloadFileBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentFileName || 'decoded-file.bin';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      showToast('Decoded as binary file', 'success');
     }
   });
 
