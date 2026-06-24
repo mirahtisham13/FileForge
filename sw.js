@@ -38,6 +38,7 @@ const ASSETS = [
   '/pages/pdf-to-text.html',
   '/pages/pdf-to-word.html',
   '/pages/pdf-page-numbering.html',
+  '/pages/crop-pdf.html',
   '/pages/zip-extractor.html',
   '/pages/blur-image.html',
   '/pages/remove-background.html',
