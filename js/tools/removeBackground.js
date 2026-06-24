@@ -60,6 +60,10 @@
         }
       };
 
+      // Dynamically import the ESM module since imgly no longer provides a UMD bundle
+      const imgly = await import('https://unpkg.com/@imgly/background-removal@1.4.3/dist/index.mjs');
+      const imglyRemoveBackground = imgly.default || imgly.removeBackground;
+
       // Call imglyRemoveBackground
       const imageBlob = await imglyRemoveBackground(file, config);
       
