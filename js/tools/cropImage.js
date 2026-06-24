@@ -131,7 +131,7 @@
   function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
 
   // Draw new crop by dragging on canvas
-  cropWorkspace.addEventListener('mousedown', (e) => {
+  cropWorkspace.addEventListener('pointerdown', (e) => {
     if (e.target === cropBox || e.target.classList.contains('crop-handle')) return;
     const pos = getRelPos(e);
     isDrawing = true;
@@ -141,7 +141,7 @@
   });
 
   // Move crop box
-  cropBox.addEventListener('mousedown', (e) => {
+  cropBox.addEventListener('pointerdown', (e) => {
     if (e.target.classList.contains('crop-handle')) return;
     const pos = getRelPos(e);
     dragState = { type: 'move', startX: pos.x, startY: pos.y, origRect: { ...cropRect } };
@@ -151,7 +151,7 @@
 
   // Resize handles
   cropBox.querySelectorAll('.crop-handle').forEach(handle => {
-    handle.addEventListener('mousedown', (e) => {
+    handle.addEventListener('pointerdown', (e) => {
       const pos = getRelPos(e);
       const cls = handle.className.split(' ')[1]; // nw, ne, sw, se, n, s, w, e
       dragState = { type: 'resize', handle: cls, startX: pos.x, startY: pos.y, origRect: { ...cropRect } };
@@ -160,7 +160,7 @@
     });
   });
 
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('pointermove', (e) => {
     if (!dragState) return;
     const pos = getRelPos(e);
     const dx = pos.x - dragState.startX;
@@ -197,10 +197,12 @@
     updateCropBox();
   });
 
-  window.addEventListener('mouseup', () => {
+  function endDrag() {
     if (dragState?.type === 'draw') isDrawing = false;
     dragState = null;
-  });
+  }
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
 
   // ── Crop & Download ──
   cropBtn.addEventListener('click', async () => {
