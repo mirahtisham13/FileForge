@@ -47,6 +47,7 @@ const ASSETS = [
   '/pages/size-calculator.html',
   '/pages/color-picker.html',
   '/pages/barcode-generator.html',
+  '/pages/base64-encoder.html',
   '/pages/merge-text.html',
   '/pages/password-generator.html',
 
