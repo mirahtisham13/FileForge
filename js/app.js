@@ -135,4 +135,43 @@
     });
   }
 
+  // --- Google Analytics 4 (GA4) Telemetry ---
+  // To use this, just set window.GA_MEASUREMENT_ID or replace 'G-XXXXXXXXXX'
+  const GA_MEASUREMENT_ID = window.GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+  
+  if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+    const gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(gtagScript);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    
+    // Automatic Pageview Tracking (App Router / SPA compatible)
+    gtag('config', GA_MEASUREMENT_ID, {
+      page_path: window.location.pathname,
+      send_page_view: true
+    });
+  }
+
+  // Global event tracker wrapper
+  window.trackEvent = function(eventName, params = {}) {
+    if (window.gtag) {
+      gtag('event', eventName, params);
+    } else {
+      // console.log('[GA4] Event:', eventName, params);
+    }
+  };
+
+  // Intercept Toast to automatically track errors globally
+  const originalShowToast = window.showToast;
+  window.showToast = function(msg, type, duration) {
+    if (type === 'error') {
+      window.trackEvent('error_occurred', { error_message: msg, page: window.location.pathname });
+    }
+    originalShowToast.apply(this, arguments);
+  };
+
 })();

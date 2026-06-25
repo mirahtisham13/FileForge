@@ -21,6 +21,10 @@ window.FFUtils = (function () {
   }
 
   function downloadBlob(blob, filename) {
+    if (window.trackEvent) {
+      window.trackEvent('download_clicked', { filename: filename, page: window.location.pathname });
+      window.trackEvent('tool_completed', { page: window.location.pathname });
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -38,6 +42,14 @@ window.FFUtils = (function () {
     inputEl.multiple = multiple;
     inputEl.accept = accept;
 
+    const trackFiles = (files) => {
+      if (files.length > 0 && window.trackEvent) {
+        window.trackEvent('file_uploaded', { file_count: files.length, type: accept, page: window.location.pathname });
+        window.trackEvent('tool_started', { page: window.location.pathname });
+      }
+      onFiles(files);
+    };
+
     dropZoneEl.addEventListener('dragover', (e) => {
       e.preventDefault();
       dropZoneEl.classList.add('drag-over');
@@ -47,11 +59,11 @@ window.FFUtils = (function () {
       e.preventDefault();
       dropZoneEl.classList.remove('drag-over');
       const files = Array.from(e.dataTransfer.files);
-      if (files.length) onFiles(files);
+      if (files.length) trackFiles(files);
     });
     inputEl.addEventListener('change', () => {
       const files = Array.from(inputEl.files);
-      if (files.length) onFiles(files);
+      if (files.length) trackFiles(files);
       inputEl.value = '';
     });
   }
