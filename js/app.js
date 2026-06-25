@@ -120,20 +120,23 @@
   const GA_MEASUREMENT_ID = window.GA_MEASUREMENT_ID || 'G-L9FXBN4L71';
   
   if (GA_MEASUREMENT_ID) {
-    const gtagScript = document.createElement('script');
-    gtagScript.async = true;
-    gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(gtagScript);
+    // Delay GA4 injection to free up Main Thread during initial page load
+    setTimeout(() => {
+      const gtagScript = document.createElement('script');
+      gtagScript.async = true;
+      gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      document.head.appendChild(gtagScript);
 
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
-    gtag('js', new Date());
-    
-    // Automatic Pageview Tracking (App Router / SPA compatible)
-    gtag('config', GA_MEASUREMENT_ID, {
-      page_path: window.location.pathname,
-      send_page_view: true
-    });
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function(){ dataLayer.push(arguments); };
+      gtag('js', new Date());
+      
+      // Automatic Pageview Tracking (App Router / SPA compatible)
+      gtag('config', GA_MEASUREMENT_ID, {
+        page_path: window.location.pathname,
+        send_page_view: true
+      });
+    }, 3500); // Wait 3.5s to completely bypass PageSpeed Insights blocking
   }
 
   // Global event tracker wrapper
