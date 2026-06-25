@@ -29,7 +29,7 @@
   --border-hover: rgba(108,99,255,0.4);
   --text: #f0f0f8;
   --text-2: #a0a0c0;
-  --text-3: #606080;
+  --text-3: #8080a0;
   --navbar-bg: rgba(13,13,20,0.85);
   --hero-bg: #0d0d14;
 }
@@ -45,7 +45,7 @@
   --border-hover: rgba(108,99,255,0.4);
   --text: #1a1a2e;
   --text-2: #4a4a70;
-  --text-3: #9090b0;
+  --text-3: #707090;
   --navbar-bg: rgba(244,244,251,0.85);
   --hero-bg: #f4f4fb;
 }
