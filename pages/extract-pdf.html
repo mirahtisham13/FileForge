@@ -195,6 +195,58 @@
         <button class="btn-primary" id="extractBtn" style="margin-top:24px;" disabled>✂️ Extract Selected Pages</button>
       </div>
     </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      <article class="seo-article">
+        <h2>The Best Way to extract pdf</h2>
+        <p>FileForge provides the ultimate tool to extract pdf. Unlike other platforms, our entire suite of tools operates completely locally within your browser. Manage your files instantly without ever sacrificing your privacy or waiting for slow server uploads.</p>
+        
+        <h2>How to Use the extract pdf Tool</h2>
+        <p>Using our tool is incredibly simple. Just drop your files into the designated area above, adjust your settings, and let our browser-based engine do the heavy lifting. The process is instantaneous and requires zero technical expertise.</p>
+        
+        <h3>100% Free and Private</h3>
+        <p>We believe that basic file utilities should be free and secure. Because the processing happens on your device, we don't have to pay expensive server costs—which means we can offer this tool completely free of charge, with no ads, no watermarks, and no sign-ups required.</p>
+        
+        <div class="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-0">
+        Are my files uploaded to a server when using the extract pdf tool?
+      </button>
+      <div class="faq-answer" id="faq-ans-0">
+        <div class="faq-answer-inner">
+          No. FileForge processes everything locally on your device, ensuring complete data privacy.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-1">
+        Is the extract pdf tool really free?
+      </button>
+      <div class="faq-answer" id="faq-ans-1">
+        <div class="faq-answer-inner">
+          Yes, all tools on FileForge are 100% free with no hidden limits or watermarks.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-2">
+        Does this tool work offline?
+      </button>
+      <div class="faq-answer" id="faq-ans-2">
+        <div class="faq-answer-inner">
+          Once the page has loaded in your browser, the tool functions entirely offline without requiring an active internet connection.
+        </div>
+      </div>
+    </div>
+  
+        </div>
+      </article>
+  
   </main>
 
   <footer class="footer">
@@ -214,5 +266,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="../js/pdfUtils.js"></script>
   <script src="../js/tools/extractPdf.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

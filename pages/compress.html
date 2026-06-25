@@ -154,6 +154,58 @@
         <button class="btn-primary" id="compressBtn">🗜️ Compress PDF</button>
       </div>
     </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      <article class="seo-article">
+        <h2>Why Compress PDFs Locally?</h2>
+        <p>When dealing with sensitive documents like financial records, legal contracts, or personal IDs, uploading files to a cloud server is a massive security risk. FileForge processes your PDF files entirely within your web browser. This means your data never leaves your device, guaranteeing 100% privacy while drastically reducing file sizes.</p>
+        
+        <h2>How to Reduce PDF Size Without Losing Quality</h2>
+        <p>Compressing a PDF is incredibly simple. Just drag and drop your file into the designated area above. You can easily adjust the target size in kilobytes (KB) or megabytes (MB). Our advanced local compression engine will analyze the document and optimize images and embedded fonts to reach your target size while preserving visual fidelity.</p>
+        
+        <h3>Lossless vs Lossy Compression</h3>
+        <p>FileForge allows you to balance quality and file size. For most text-heavy documents, you can safely compress the file by over 70% with virtually no noticeable difference in text sharpness. If your document contains high-resolution photos, our engine applies intelligent compression to maintain clarity while shrinking the overall footprint.</p>
+        
+        <div class="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-0">
+        Are my files uploaded to a server?
+      </button>
+      <div class="faq-answer" id="faq-ans-0">
+        <div class="faq-answer-inner">
+          No! All processing is done locally in your browser using WebAssembly. Your files never touch our servers.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-1">
+        Will compressing my PDF ruin the images?
+      </button>
+      <div class="faq-answer" id="faq-ans-1">
+        <div class="faq-answer-inner">
+          Our intelligent compression algorithm balances file size with visual quality, ensuring your images remain clear and legible.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-2">
+        Is there a limit to the file size I can compress?
+      </button>
+      <div class="faq-answer" id="faq-ans-2">
+        <div class="faq-answer-inner">
+          Because the processing happens on your own device, the only limit is the available RAM on your computer or phone.
+        </div>
+      </div>
+    </div>
+  
+        </div>
+      </article>
+  
   </main>
 
   <footer class="footer">
@@ -172,5 +224,20 @@
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="../js/tools/compress.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

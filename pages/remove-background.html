@@ -144,6 +144,58 @@
         </div>
       </div>
     </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      <article class="seo-article">
+        <h2>Free AI Background Removal in Your Browser</h2>
+        <p>Removing the background from an image used to require expensive software or cloud-based subscriptions. With FileForge, you can leverage cutting-edge Artificial Intelligence directly in your web browser to erase backgrounds instantly—for free, and without any watermarks.</p>
+        
+        <h2>How Our Offline AI Background Eraser Works</h2>
+        <p>When you upload an image, FileForge loads a lightweight AI model directly into your browser's memory. This model has been trained to detect subjects—like people, products, or pets—and separate them from their surroundings with pixel-perfect accuracy. Because it runs locally, it is significantly faster than uploading high-res images to a server.</p>
+        
+        <h3>Perfect for E-commerce and Social Media</h3>
+        <p>Whether you need a transparent PNG for a product listing, a YouTube thumbnail, or an Instagram post, our tool delivers professional-grade cutouts. The resulting image is saved locally to your device in full resolution.</p>
+        
+        <div class="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-0">
+        Is the AI processing really done locally?
+      </button>
+      <div class="faq-answer" id="faq-ans-0">
+        <div class="faq-answer-inner">
+          Yes! We use WebGL and WebAssembly to run the AI model directly on your device's GPU/CPU.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-1">
+        Will there be a watermark on my downloaded image?
+      </button>
+      <div class="faq-answer" id="faq-ans-1">
+        <div class="faq-answer-inner">
+          Never. FileForge is 100% free and we never add watermarks to your files.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-2">
+        Do I need to create an account?
+      </button>
+      <div class="faq-answer" id="faq-ans-2">
+        <div class="faq-answer-inner">
+          No sign-ups, no subscriptions, and no email required. Just drop your image and download the result.
+        </div>
+      </div>
+    </div>
+  
+        </div>
+      </article>
+  
   </main>
 
   <footer class="footer">
@@ -160,5 +212,20 @@
   <script src="../js/app.js" defer></script>
   <script src="../js/pdfUtils.js"></script>
   <script src="../js/tools/removeBackground.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

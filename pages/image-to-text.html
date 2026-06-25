@@ -178,6 +178,58 @@
         <button class="btn-secondary" id="resetBtn" style="margin-top:20px;">Upload Another Image</button>
       </div>
     </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      <article class="seo-article">
+        <h2>What is Optical Character Recognition (OCR)?</h2>
+        <p>Optical Character Recognition (OCR) is a technology that analyzes an image and extracts the readable text from it. FileForge brings this powerful technology directly into your web browser, allowing you to instantly convert screenshots, scanned documents, and photos into editable text.</p>
+        
+        <h2>How to Convert Images to Text for Free</h2>
+        <p>Drop any image file (JPG, PNG, WebP) into the tool above. Our local OCR engine will scan the image, identify characters, and reconstruct the text layout. You can then copy the extracted text to your clipboard with a single click, completely bypassing the need to manually transcribe documents.</p>
+        
+        <h3>Why Privacy Matters for OCR Tools</h3>
+        <p>People frequently use OCR for sensitive documents like medical records, invoices, or ID cards. Uploading these to cloud-based OCR services is a privacy nightmare. With FileForge, the text extraction happens entirely offline on your device, ensuring zero data leakage.</p>
+        
+        <div class="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-0">
+        How accurate is the text extraction?
+      </button>
+      <div class="faq-answer" id="faq-ans-0">
+        <div class="faq-answer-inner">
+          Our local OCR engine is highly accurate for printed text, especially on clear, high-contrast images.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-1">
+        Can I extract text from handwritten notes?
+      </button>
+      <div class="faq-answer" id="faq-ans-1">
+        <div class="faq-answer-inner">
+          Handwriting recognition is currently limited, but printed or typed text will yield excellent results.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-2">
+        Is my image data kept private?
+      </button>
+      <div class="faq-answer" id="faq-ans-2">
+        <div class="faq-answer-inner">
+          Absolutely. The OCR processing happens entirely within your browser, and no images are ever uploaded.
+        </div>
+      </div>
+    </div>
+  
+        </div>
+      </article>
+  
   </main>
 
   <footer class="footer">
@@ -195,5 +247,20 @@
   <!-- Load Tesseract.js -->
   <script src="https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
   <script src="../js/tools/imageToText.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

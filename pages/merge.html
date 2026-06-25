@@ -134,6 +134,58 @@
         <button class="btn-primary" id="mergeBtn">🔗 Merge PDFs</button>
       </div>
     </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      <article class="seo-article">
+        <h2>The Safest Way to Merge PDF Documents</h2>
+        <p>Combining multiple PDF files into a single document is a common task, but doing it securely is crucial when handling sensitive work files. FileForge allows you to merge PDFs offline, right in your browser, ensuring that confidential information remains strictly on your device.</p>
+        
+        <h2>How to Combine PDF Files Instantly</h2>
+        <p>Simply select the PDF files you want to combine. You can drag and drop them into the workspace above. Once loaded, you can easily drag the files to rearrange their order before hitting the merge button. The entire process takes seconds and requires zero internet upload bandwidth.</p>
+        
+        <h3>Why Browser-Based Processing Beats Cloud Uploads</h3>
+        <p>Traditional PDF websites force you to upload your files, wait in a server queue, and then download the merged result. By performing the merge locally, FileForge eliminates upload and download times, making it the fastest and most secure way to manage your documents.</p>
+        
+        <div class="faq-section">
+          <h2>Frequently Asked Questions</h2>
+          
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-0">
+        Is there a limit to how many PDFs I can merge?
+      </button>
+      <div class="faq-answer" id="faq-ans-0">
+        <div class="faq-answer-inner">
+          You can merge as many PDFs as your device's memory can handle. There are no artificial limits.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-1">
+        Can I rearrange pages before combining them?
+      </button>
+      <div class="faq-answer" id="faq-ans-1">
+        <div class="faq-answer-inner">
+          Yes, you can easily drag and drop the files in the preview area to set your desired order before merging.
+        </div>
+      </div>
+    </div>
+  
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false" aria-controls="faq-ans-2">
+        Do I need internet access to merge PDFs?
+      </button>
+      <div class="faq-answer" id="faq-ans-2">
+        <div class="faq-answer-inner">
+          Once the FileForge website loads initially, the actual merging process happens offline on your machine.
+        </div>
+      </div>
+    </div>
+  
+        </div>
+      </article>
+  
   </main>
 
   <footer class="footer">
@@ -150,5 +202,20 @@
   <script src="../js/pdfUtils.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="../js/tools/merge.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
