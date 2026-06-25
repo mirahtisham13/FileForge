@@ -139,11 +139,11 @@
           100% Free · Browser-Based · Private
         </div>
         <h1 class="hero-title">
-          Your Ultimate
-          <span class="gradient-text">File Toolkit</span>
+          Edit files without<br/>
+          <span class="gradient-text">uploading them.</span>
         </h1>
-        <p class="hero-subtitle" style="display:none"></p>
-        <div class="hero-strip-wrap">
+        <p class="hero-subtitle">100% private, browser-based tools. No limits, no accounts, and your files never leave your device.</p>
+        <div class="hero-strip-wrap" style="margin-top: 32px;">
           <div class="features-strip hero-strip">
             <div class="feature-pill"><span class="feature-pill-icon">🛠️</span><span>30+ Tools</span></div>
             <span class="feature-pill-sep"></span>
@@ -161,8 +161,41 @@
     </div>
   </section>
 
-  <!-- TOOLS SECTION -->
-  <section class="tools-section" id="tools" style="padding-top: 24px;">
+  <!-- TRUST SECTION -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">🛡️</div>
+          <h3>Zero Uploads</h3>
+          <p>Your files are never uploaded to a cloud server. Everything is processed securely in your local browser's memory.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">⚡</div>
+          <h3>WebAssembly Powered</h3>
+          <p>We use compiled C++ and WebAssembly to run desktop-grade processing algorithms directly inside your browser.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">💎</div>
+          <h3>Always Free</h3>
+          <p>Because we don't have to pay for expensive cloud processing servers, FileForge is completely free with no limits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB NAVIGATION -->
+  <div class="tabs-wrapper container" style="margin-top: 40px; margin-bottom: 16px; display: flex; justify-content: center;">
+    <div class="tools-tabs">
+      <button class="tab-btn active" data-target="all">All Tools</button>
+      <button class="tab-btn" data-target="tools">PDF</button>
+      <button class="tab-btn" data-target="image-tools">Images</button>
+      <button class="tab-btn" data-target="utility-tools">Security & Utilities</button>
+    </div>
+  </div>
+
+  <!-- TOOLS SECTION (PDF) -->
+  <section class="tools-section tab-section active" id="tools" style="padding-top: 8px;">
     <div class="container">
       <div class="section-header">
         <h2 class="section-tag">PDF Tools</h2>
@@ -403,7 +436,7 @@
   </section>
 
   <!-- IMAGE TOOLS SECTION -->
-  <section class="tools-section" id="image-tools" style="padding-top:0;">
+  <section class="tools-section tab-section active" id="image-tools" style="padding-top:0;">
     <div class="container">
       <div class="section-header">
         <h2 class="section-tag" style="background:rgba(236,72,153,0.15);color:#ec4899;">Image Tools</h2>
@@ -559,7 +592,7 @@
   </section>
 
   <!-- UTILITY & AI TOOLS SECTION -->
-  <section class="tools-section" id="utility-tools" style="padding-top:0;">
+  <section class="tools-section tab-section active" id="utility-tools" style="padding-top:0;">
     <div class="container">
       <div class="section-header">
         <h2 class="section-tag">Utility & AI Tools</h2>
@@ -793,5 +826,36 @@
   </div>
 
   <script src="js/app.js" defer></script>
+  <script>
+    // Tab Switching Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabSections = document.querySelectorAll('.tab-section');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          tabBtns.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          btn.classList.add('active');
+
+          const target = btn.getAttribute('data-target');
+
+          // Show/Hide sections based on target
+          tabSections.forEach(section => {
+            if (target === 'all') {
+              section.classList.add('active');
+            } else {
+              if (section.id === target) {
+                section.classList.add('active');
+              } else {
+                section.classList.remove('active');
+              }
+            }
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>
