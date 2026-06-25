@@ -137,9 +137,9 @@
 
   // --- Google Analytics 4 (GA4) Telemetry ---
   // To use this, just set window.GA_MEASUREMENT_ID or replace 'G-XXXXXXXXXX'
-  const GA_MEASUREMENT_ID = window.GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+  const GA_MEASUREMENT_ID = window.GA_MEASUREMENT_ID || 'G-L9FXBN4L71';
   
-  if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+  if (GA_MEASUREMENT_ID) {
     const gtagScript = document.createElement('script');
     gtagScript.async = true;
     gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
