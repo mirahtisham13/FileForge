@@ -183,10 +183,10 @@
           <div class="option-group" style="flex:1; min-width:200px;">
             <label>Target File Size <span style="font-size:0.75rem;color:var(--text-3);">(optional)</span></label>
             <div style="display:flex; gap:8px; align-items:center;">
-              <input type="number" id="targetSize" placeholder="e.g. 2" min="0.1" step="0.1" style="flex:1; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;"/>
+              <input type="number" id="targetSize" placeholder="e.g. 500" min="0.1" step="0.1" style="flex:1; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;"/>
               <select id="targetUnit" style="width:80px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 8px; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;">
+                <option value="kb" selected>KB</option>
                 <option value="mb">MB</option>
-                <option value="kb">KB</option>
               </select>
             </div>
             <p style="font-size:0.72rem; color:var(--text-3); margin-top:4px;">Leave empty to use compression level above</p>
