@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compress JPEG to 200KB Online (Free & Private) | FileForge</title>
+  <meta name="description" content="Reduce image file size without noticeable quality loss. JPG, PNG, WEBP supported. 100% free, private, and secure with no server uploads required." />
+  <meta name="theme-color" content="#6c63ff"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" href="../assets/icons/icon-192.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .compare-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .compare-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .compare-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-2);
+    }
+    .compare-size {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .compare-size.saved { color: #10b981; }
+    .compare-img-wrap {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      min-height: 200px;
+    }
+    .compare-img-wrap img {
+      max-width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+
+    .saving-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: rgba(16,185,129,0.12);
+      color: #10b981;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1px solid rgba(16,185,129,0.25);
+    }
+    @media(max-width:600px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Compress Image - File Forge",
+  "url": "https://www.file-forge.dev/pages/compress-image",
+  "description": "Reduce image file size without noticeable quality loss. JPG, PNG, WEBP supported.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript and modern browser support.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@id": "https://www.file-forge.dev/#organization"
+  },
+  "featureList": [
+    "No server uploads required",
+    "Processes files locally on device",
+    "Completely free to use"
+  ]
+}
+</script>
+
+  <!-- SEO & Robots -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://www.file-forge.dev/pages/compress-image" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.file-forge.dev/pages/compress-image" />
+  <meta property="og:title" content="Compress Image — Free Local Tool | FileForge" />
+  <meta property="og:description" content="Reduce image file size without noticeable quality loss. JPG, PNG, WEBP supported. 100% free, private, and secure with no server uploads required." />
+  <meta property="og:image" content="https://www.file-forge.dev/assets/icons/icon-512.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:url" content="https://www.file-forge.dev/pages/compress-image" />
+  <meta name="twitter:title" content="Compress Image — Free Local Tool | FileForge" />
+  <meta name="twitter:description" content="Reduce image file size without noticeable quality loss. JPG, PNG, WEBP supported. 100% free, private, and secure with no server uploads required." />
+  <meta name="twitter:image" content="https://www.file-forge.dev/assets/icons/icon-512.png" />
+  
+  <link rel="canonical" href="https://fileforge.app/pages/compress-jpeg-to-200kb.html" />
+</head>
+<body class="page-wrapper">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
+            <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
+            <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#6c63ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="logo-text">File<span class="logo-accent">Forge</span></span>
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon theme-icon-dark">🌙</span>
+          <span class="theme-icon theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Compress Image</span>
+      </nav>
+      <div class="tool-page-header">
+        <div class="tool-page-icon" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21,15 16,10 5,21"/>
+            <path d="M14 14l-2 2-2-2"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Compress JPEG to 200KB Instantly</h1>
+          <p class="tool-page-subtitle">Shrink your image file size to exactly 200KB with minimal quality loss.</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" aria-label="Upload file" accept="image/jpeg,image/png,image/webp" multiple/>
+        <span class="drop-zone-icon">🗜️</span>
+        <h3>Drop your images here</h3>
+        <p>JPG · PNG · WEBP — compress multiple at once</p>
+        <button class="btn-browse" type="button" onclick="document.getElementById('fileInput').click()">Browse Images</button>
+      </div>
+
+      <div class="action-panel" id="actionPanel">
+        <div class="options-row">
+          <div class="option-group" style="flex:1; min-width:200px;">
+            <label for="quality">Compression Level</label>
+            <select id="quality" aria-label="quality">
+              <option value="0.85">High Quality (mild compression)</option>
+              <option value="0.6" selected>Balanced (recommended)</option>
+              <option value="0.3">Max Compression (smallest size)</option>
+            </select>
+          </div>
+
+          <div class="option-group" style="flex:1; min-width:200px;">
+            <label>Target File Size <span style="font-size:0.75rem;color:var(--text-3);">(optional)</span></label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="number" id="targetSize" aria-label="target size" placeholder="e.g. 500" min="0.1" step="0.1" style="flex:1; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;"/>
+              <select id="targetUnit" aria-label="target unit" style="width:80px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 8px; color:var(--text); font-family:inherit; font-size:0.9rem; outline:none;">
+                <option value="kb" selected>KB</option>
+                <option value="mb">MB</option>
+              </select>
+            </div>
+            <p style="font-size:0.72rem; color:var(--text-3); margin-top:4px;">Leave empty to use compression level above</p>
+          </div>
+          <div class="option-group">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat" aria-label="output format">
+              <option value="same">Same as original</option>
+              <option value="image/jpeg">JPG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Per-image compare cards rendered dynamically -->
+        <div id="imageCards"></div>
+
+        <div class="result-panel" id="resultPanel" style="margin-top:20px;">
+          <h4>✅ Compression Complete!</h4>
+          <p id="resultInfo"></p>
+          <div class="result-actions">
+            <button class="btn-primary" id="downloadAllBtn" style="width:auto">⬇️ Download All</button>
+            <button class="btn-secondary" id="resetBtn">Compress More</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="compressBtn" style="margin-top:20px;">🗜️ Compress Images</button>
+      </div>
+    </div>
+  
+
+      <!-- SEO ARTICLE INJECTION -->
+      
+  
+  
+    <div class="container">
+      
+      <section class="seo-article" style="margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--border);">
+        <h2>Why do you need a 200KB JPEG?</h2>
+        <p>Many online platforms, forums, and passport application portals require profile pictures and uploaded images to be strictly under 200KB. Compressing a high-resolution smartphone photo down to 200KB can be difficult without the right tools.</p>
+        <p>FileForge makes it incredibly easy by allowing you to specify <strong>200KB</strong> as your exact target size. Our algorithm dynamically adjusts the JPEG quality factor to match your requirement.</p>
+        
+        <h2>How our 200KB Image Compressor works</h2>
+        <p>When you drop an image into the tool, FileForge uses your device's local CPU to re-encode the image. We automatically downscale the image dimensions and apply a custom compression ratio until the output file fits under the 200KB limit.</p>
+        
+        <h2>Total Privacy</h2>
+        <p>Because the compression happens in your web browser, you don't need to worry about uploading personal photos to a third-party server. It is 100% private and instantaneous.</p>
+      </section>
+    
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html" class="nav-logo" style="font-size:0.9rem;">File<span class="logo-accent">Forge</span></a>
+        <p class="footer-copy">All processing done locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="../js/app.js" defer></script>
+  <script src="../js/pdfUtils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="../js/tools/compressImage.js"></script>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        const content = btn.nextElementSibling;
+        if (!expanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0';
+        }
+      });
+    });
+  </script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      
+      const ts = document.getElementById('targetSize');
+      if (ts) {
+        ts.value = '200';
+        const tu = document.getElementById('targetUnit');
+        if (tu) tu.value = 'kb';
+        ts.style.borderColor = '#10b981';
+      }
+    
+    });
+  </script>
+</body>
+</html>

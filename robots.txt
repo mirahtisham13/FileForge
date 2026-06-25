@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://file-forge.dev/sitemap.xml
+Sitemap: https://fileforge.app/sitemap.xml
