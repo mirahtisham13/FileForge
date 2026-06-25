@@ -124,6 +124,67 @@ self.addEventListener('activate', (event) => {
 // This prevents "page not available" when cache is stale/empty.
 
 self.addEventListener('fetch', (event) => {
+  // --- WEB SHARE TARGET INTERCEPTION ---
+  if (event.request.method === 'POST' && event.request.url.includes('/share-target')) {
+    event.respondWith((async () => {
+      try {
+        const formData = await event.request.formData();
+        const files = formData.getAll('shared_file');
+        
+        if (files && files.length > 0) {
+          // Open IndexedDB and store the file temporarily
+          await new Promise((resolve, reject) => {
+            const request = indexedDB.open('FileForgeDB', 1);
+            request.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains('sharedFiles')) {
+                db.createObjectStore('sharedFiles', { keyPath: 'id' });
+              }
+            };
+            request.onsuccess = (e) => {
+              const db = e.target.result;
+              // Add a defensive check in case the object store wasn't created
+              if (!db.objectStoreNames.contains('sharedFiles')) {
+                db.close();
+                // If version is 1 and no store, we need to bump version to trigger onupgradeneeded
+                const req2 = indexedDB.open('FileForgeDB', 2);
+                req2.onupgradeneeded = (e2) => {
+                  e2.target.result.createObjectStore('sharedFiles', { keyPath: 'id' });
+                };
+                req2.onsuccess = (e2) => {
+                  const db2 = e2.target.result;
+                  const tx = db2.transaction('sharedFiles', 'readwrite');
+                  tx.objectStore('sharedFiles').put({ id: 'latest_share', files: files });
+                  tx.oncomplete = () => resolve();
+                };
+                return;
+              }
+              const tx = db.transaction('sharedFiles', 'readwrite');
+              const store = tx.objectStore('sharedFiles');
+              // Store all files in an array
+              store.put({ id: 'latest_share', files: files });
+              tx.oncomplete = () => resolve();
+              tx.onerror = (err) => reject(err);
+            };
+            request.onerror = (err) => reject(err);
+          });
+        }
+        
+        // Determine redirect target based on file type (if it's a PDF, go to compress PDF, else compress image)
+        let redirectUrl = '/pages/compress-image.html?shared=true';
+        if (files && files.length > 0 && files[0].type === 'application/pdf') {
+          redirectUrl = '/pages/compress.html?shared=true';
+        }
+        
+        return Response.redirect(redirectUrl, 303);
+      } catch (err) {
+        console.error('[SW] Share Target Error:', err);
+        return Response.redirect('/', 303);
+      }
+    })());
+    return;
+  }
+
   // Skip non-GET requests and browser-extension requests
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);

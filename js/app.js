@@ -157,4 +157,43 @@
     originalShowToast.apply(this, arguments);
   };
 
+  // --- Web Share Target API handling ---
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('shared') === 'true') {
+    const request = indexedDB.open('FileForgeDB');
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('sharedFiles')) return;
+      const tx = db.transaction('sharedFiles', 'readonly');
+      const store = tx.objectStore('sharedFiles');
+      const getReq = store.get('latest_share');
+      getReq.onsuccess = (ev) => {
+        const data = ev.target.result;
+        if (data && data.files && data.files.length > 0) {
+          // Find the main file input on the page
+          const fileInput = document.getElementById('file-upload') || document.querySelector('input[type="file"]');
+          if (fileInput) {
+            // Assign files via DataTransfer
+            const dataTransfer = new DataTransfer();
+            data.files.forEach(f => dataTransfer.items.add(f));
+            fileInput.files = dataTransfer.files;
+            
+            // Dispatch change event to trigger the tool's handler
+            const event = new Event('change', { bubbles: true });
+            fileInput.dispatchEvent(event);
+            
+            showToast('Shared file loaded successfully!', 'success');
+            
+            // Cleanup the DB
+            const delTx = db.transaction('sharedFiles', 'readwrite');
+            delTx.objectStore('sharedFiles').delete('latest_share');
+            
+            // Remove the ?shared=true from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        }
+      };
+    };
+  }
+
 })();
