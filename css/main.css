@@ -3,8 +3,7 @@
    Design System with Dark/Light Mode
    ============================================= */
 
-/* --- Google Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* --- Google Fonts loaded via HTML for performance --- */
 
 /* --- CSS Variables --- */
 :root {
