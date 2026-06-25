@@ -149,7 +149,7 @@ img { max-width: 100%; }
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .install-app-btn:hover {
   background: var(--hover);
@@ -174,7 +174,7 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   position: relative;
   overflow: hidden;
 }
@@ -183,7 +183,7 @@ img { max-width: 100%; }
   background: rgba(var(--accent-rgb), 0.1);
   transform: scale(1.05);
 }
-.theme-icon { position: absolute; transition: all var(--transition); }
+.theme-icon { position: absolute; transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition); }
 [data-theme="dark"] .theme-icon-light { opacity: 0; transform: translateY(-20px); }
 [data-theme="dark"] .theme-icon-dark { opacity: 1; transform: translateY(0); }
 [data-theme="light"] .theme-icon-dark { opacity: 0; transform: translateY(20px); }
@@ -370,7 +370,7 @@ img { max-width: 100%; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   overflow: hidden;
   box-shadow: var(--shadow);
 }
@@ -401,7 +401,7 @@ img { max-width: 100%; }
   justify-content: center;
   color: var(--tool-color);
   flex-shrink: 0;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
 }
 .tool-card:hover .tool-icon-wrap {
   transform: scale(1.08);
@@ -424,7 +424,7 @@ img { max-width: 100%; }
 .tool-arrow {
   font-size: 1.2rem;
   color: var(--text-3);
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   flex-shrink: 0;
 }
 .tool-card:hover .tool-arrow {
@@ -558,7 +558,7 @@ img { max-width: 100%; }
   padding: 60px 40px;
   text-align: center;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   background: var(--surface);
   position: relative;
 }
@@ -600,7 +600,7 @@ img { max-width: 100%; }
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   font-family: inherit;
 }
 .btn-browse:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.4); }
@@ -620,7 +620,7 @@ img { max-width: 100%; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   animation: slideIn 0.2s ease;
 }
 @keyframes slideIn {
@@ -652,7 +652,7 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   flex-shrink: 0;
 }
 .file-remove:hover { background: rgba(239,68,68,0.2); transform: scale(1.1); }
@@ -681,7 +681,7 @@ img { max-width: 100%; }
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
   font-family: inherit;
   width: 100%;
   justify-content: center;
@@ -708,7 +708,7 @@ img { max-width: 100%; }
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
 }
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -822,7 +822,7 @@ img { max-width: 100%; }
   font-size: 0.9rem;
   font-weight: 500;
   box-shadow: var(--shadow-lg);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 999;
   white-space: nowrap;
   pointer-events: none;
@@ -870,7 +870,7 @@ img { max-width: 100%; }
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
 }
 .btn-install:hover { opacity: 0.9; }
 .btn-dismiss {
@@ -884,7 +884,7 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition), opacity var(--transition);
 }
 .btn-dismiss:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -1075,7 +1075,7 @@ img { max-width: 100%; }
   padding: 10px 20px;
   border-radius: 100px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
 }
 .tab-btn:hover {
