@@ -30,6 +30,7 @@
   --text: #f0f0f8;
   --text-2: #a0a0c0;
   --text-3: #8080a0;
+  --accent-text: #bcaafc;
   --navbar-bg: rgba(13,13,20,0.85);
   --hero-bg: #0d0d14;
 }
@@ -46,6 +47,7 @@
   --text: #1a1a2e;
   --text-2: #4a4a70;
   --text-3: #707090;
+  --accent-text: #4b43d3;
   --navbar-bg: rgba(244,244,251,0.85);
   --hero-bg: #f4f4fb;
 }
@@ -111,7 +113,7 @@ img { max-width: 100%; }
   border: 1px solid rgba(108,99,255,0.25);
 }
 .logo-text { color: var(--text); }
-.logo-accent { color: var(--accent); }
+.logo-accent { color: var(--accent-text); }
 
 .nav-actions { display: flex; align-items: center; gap: 12px; }
 
@@ -314,7 +316,7 @@ img { max-width: 100%; }
   display: inline-block;
   padding: 4px 14px;
   background: rgba(var(--accent-rgb), 0.1);
-  color: var(--accent);
+  color: var(--accent-text);
   border-radius: 100px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -477,7 +479,7 @@ img { max-width: 100%; }
 }
 .footer-copy {
   font-size: 0.82rem;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 
 /* =============================================
