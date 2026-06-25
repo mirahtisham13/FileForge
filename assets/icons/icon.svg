@@ -1,0 +1,18 @@
+<svg viewBox="0 0 512 512" width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid background to perfectly match app theme and prevent artifacts -->
+  <rect width="512" height="512" fill="#0d0d14"/>
+  
+  <!-- Centered and scaled vector logo (Scale 11x, center translated) -->
+  <g transform="translate(102, 102) scale(11)">
+    <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#grad1)" opacity="0.2"/>
+    <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#grad1)" stroke-width="1.5"/>
+    <path d="M18 2V8H24" stroke="url(#grad1)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M14 13C14 13 12 15.5 12 17C12 18.105 12.895 19 14 19C15.105 19 16 18.105 16 17C16 15.5 14 13 14 13Z" fill="url(#grad1)"/>
+    <defs>
+      <linearGradient id="grad1" x1="6" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#6c63ff"/>
+        <stop offset="100%" stop-color="#a855f7"/>
+      </linearGradient>
+    </defs>
+  </g>
+</svg>
