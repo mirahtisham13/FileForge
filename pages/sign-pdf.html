@@ -75,7 +75,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -99,7 +99,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Sign PDF</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
           </svg>
         </div>
@@ -110,7 +110,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept=".pdf"/>
         <span class="drop-zone-icon">🖋️</span>
         <h3>Drop your PDF here</h3>
         <p>Private & secure — processed locally</p>
@@ -129,7 +129,7 @@
                   <button class="btn-secondary" id="clearSigBtn" style="padding:4px 8px;font-size:0.75rem;">Clear</button>
                   <label class="btn-secondary" style="padding:4px 8px;font-size:0.75rem;cursor:pointer;display:inline-block;margin:0;">
                     Upload Image
-                    <input type="file" id="uploadSigBtn" accept="image/png, image/jpeg" style="display:none;" />
+                    <input type="file" id="uploadSigBtn" aria-label="Upload file" accept="image/png, image/jpeg" style="display:none;" />
                   </label>
                   <button class="btn-primary" id="addSigBtn" style="padding:4px 8px;font-size:0.75rem;">Add Drawing</button>
                 </div>

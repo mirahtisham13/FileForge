@@ -69,7 +69,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -93,7 +93,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Remove Background</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 12A10 10 0 0 0 15 21.5"></path>
             <path d="M15 21.5L22 12L15 2.5"></path>
             <path d="M22 12A10 10 0 0 0 9 2.5"></path>
@@ -103,14 +103,14 @@
           <h1 class="tool-page-title">Remove Background</h1>
           <p class="tool-page-subtitle">Automatically cut out the subject from your images using local AI.</p>
           <div style="margin-top: 8px; font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             Requires internet on first use to download the AI model. Works 100% offline afterwards.
           </div>
         </div>
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept="image/jpeg,image/png,image/webp"/>
         <span class="drop-zone-icon">✨</span>
         <h3>Drop your image here</h3>
         <p>Processed completely in your browser — zero uploads</p>

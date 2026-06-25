@@ -66,7 +66,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -91,7 +91,7 @@
       
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
             <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
           </svg>
@@ -103,7 +103,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept=".pdf"/>
         <span class="drop-zone-icon">✂️</span>
         <h3>Drop your PDF here</h3>
         <p>Private & secure — processed locally</p>
@@ -117,30 +117,30 @@
         <div class="crop-grid">
           <div class="crop-group" style="grid-column: 1 / -1; align-items:center;">
             <label for="marginTop">Top Margin</label>
-            <input type="number" id="marginTop" value="36" min="0" max="500" style="width:120px;"/>
+            <input type="number" id="marginTop" aria-label="margin top" value="36" min="0" max="500" style="width:120px;"/>
           </div>
           <div class="crop-group">
             <label for="marginLeft">Left Margin</label>
-            <input type="number" id="marginLeft" value="36" min="0" max="500"/>
+            <input type="number" id="marginLeft" aria-label="margin left" value="36" min="0" max="500"/>
           </div>
           <div class="crop-group">
             <label for="marginRight">Right Margin</label>
-            <input type="number" id="marginRight" value="36" min="0" max="500"/>
+            <input type="number" id="marginRight" aria-label="margin right" value="36" min="0" max="500"/>
           </div>
           <div class="crop-group" style="grid-column: 1 / -1; align-items:center;">
             <label for="marginBottom">Bottom Margin</label>
-            <input type="number" id="marginBottom" value="36" min="0" max="500" style="width:120px;"/>
+            <input type="number" id="marginBottom" aria-label="margin bottom" value="36" min="0" max="500" style="width:120px;"/>
           </div>
         </div>
 
         <button class="btn-primary" id="applyBtn" style="margin-top:32px; width:auto; min-width:200px;">✂️ Crop PDF</button>
 
-        <div class="progress-wrap" id="progressWrap" style="display:none; margin-top:20px;">
+        <div class="progress-wrap" id="progressWrap" style="display:none; margin-top:20px;" aria-live="polite" aria-atomic="true">
           <div class="progress-label">
             <span class="msg" id="progressMsg">Cropping pages...</span>
             <span class="pct" id="progressPct">0%</span>
           </div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
         </div>
         
         <div class="result-panel" id="resultPanel" style="display:none; margin-top:20px;">

@@ -60,7 +60,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -84,7 +84,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Merge Text Files</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -99,7 +99,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" multiple accept=".txt,.csv,.log,.md,.json"/>
+        <input type="file" id="fileInput" aria-label="Upload file" multiple accept=".txt,.csv,.log,.md,.json"/>
         <span class="drop-zone-icon">📑</span>
         <h3>Drop text files here</h3>
         <p>Select multiple files to merge them instantly</p>
@@ -113,7 +113,7 @@
         <div class="options-row" style="margin-top:20px;">
           <div class="option-group" style="flex:1;">
             <label for="separator">Separator Between Files</label>
-            <select id="separator">
+            <select id="separator" aria-label="separator">
               <option value="newline">New Line (\n)</option>
               <option value="double_newline">Double New Line (\n\n)</option>
               <option value="divider">Visual Divider (---)</option>

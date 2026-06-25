@@ -92,7 +92,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -116,7 +116,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Extract PDF Pages</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <path d="M9 15l2 2 4-4"></path>
@@ -129,7 +129,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept=".pdf"/>
         <span class="drop-zone-icon">✂️</span>
         <h3>Drop your PDF here</h3>
         <p>Private & secure — processed locally</p>
@@ -150,7 +150,7 @@
         <div class="options-row" style="margin-top:24px; align-items:center;">
           <div class="option-group" style="max-width: 300px;">
             <label for="outFormat">Extract As</label>
-            <select id="outFormat">
+            <select id="outFormat" aria-label="out format">
               <option value="pdf">PDF Document</option>
               <option value="image">Images (JPG/PNG)</option>
             </select>
@@ -160,14 +160,14 @@
         <div class="options-row" id="imageSettings" style="display:none; margin-top:12px;">
           <div class="option-group">
             <label for="imgFormat">Image Format</label>
-            <select id="imgFormat">
+            <select id="imgFormat" aria-label="img format">
               <option value="jpeg">JPG (smaller size)</option>
               <option value="png">PNG (better quality)</option>
             </select>
           </div>
           <div class="option-group">
             <label for="imgScale">Resolution</label>
-            <select id="imgScale">
+            <select id="imgScale" aria-label="img scale">
               <option value="1">72 DPI (screen)</option>
               <option value="2" selected>150 DPI (standard)</option>
               <option value="3">216 DPI (high quality)</option>
@@ -175,12 +175,12 @@
           </div>
         </div>
 
-        <div class="progress-wrap" id="progressWrap" style="margin-top:20px;">
+        <div class="progress-wrap" id="progressWrap" style="margin-top:20px;" aria-live="polite" aria-atomic="true">
           <div class="progress-label">
             <span class="msg" id="progressMsg">Extracting pages...</span>
             <span class="pct" id="progressPct">0%</span>
           </div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
         </div>
 
         <div class="result-panel" id="resultPanel" style="margin-top:20px;">

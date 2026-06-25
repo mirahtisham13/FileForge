@@ -132,7 +132,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -156,7 +156,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>Crop Image</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2v14h14"/><path d="M2 6h14v14"/>
             <rect x="6" y="6" width="8" height="8" stroke-dasharray="2 1"/>
           </svg>
@@ -168,7 +168,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept="image/jpeg,image/png,image/webp"/>
         <span class="drop-zone-icon">✂️</span>
         <h3>Drop your image here</h3>
         <p>JPG · PNG · WEBP — drag to select crop region</p>
@@ -190,7 +190,7 @@
         <div class="options-row">
           <div class="option-group">
             <label for="cropFormat">Output Format</label>
-            <select id="cropFormat">
+            <select id="cropFormat" aria-label="crop format">
               <option value="same">Same as original</option>
               <option value="image/jpeg">JPG</option>
               <option value="image/png">PNG</option>
@@ -199,7 +199,7 @@
           </div>
           <div class="option-group">
             <label for="cropQuality">Quality</label>
-            <select id="cropQuality">
+            <select id="cropQuality" aria-label="crop quality">
               <option value="0.85">85% (recommended)</option>
               <option value="0.95">95% (high quality)</option>
               <option value="1">100% (lossless)</option>

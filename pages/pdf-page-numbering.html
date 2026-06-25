@@ -60,7 +60,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -84,7 +84,7 @@
       <nav class="breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-sep">›</span><span>PDF Page Numbering</span></nav>
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="9" y1="19" x2="15" y2="19"></line>
@@ -98,7 +98,7 @@
       </div>
 
       <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" accept=".pdf"/>
+        <input type="file" id="fileInput" aria-label="Upload file" accept=".pdf"/>
         <span class="drop-zone-icon">🔢</span>
         <h3>Drop your PDF here</h3>
         <p>Private &amp; secure — processed locally</p>
@@ -111,7 +111,7 @@
         <div class="options-row">
           <div class="option-group">
             <label for="position">Position</label>
-            <select id="position">
+            <select id="position" aria-label="position">
               <option value="bottom-center" selected>Bottom Center</option>
               <option value="bottom-left">Bottom Left</option>
               <option value="bottom-right">Bottom Right</option>
@@ -122,7 +122,7 @@
           </div>
           <div class="option-group">
             <label for="format">Format</label>
-            <select id="format">
+            <select id="format" aria-label="format">
               <option value="n" selected>1, 2, 3…</option>
               <option value="page-n">Page 1, Page 2…</option>
               <option value="n-of-total">1 / 10, 2 / 10…</option>
@@ -131,18 +131,18 @@
           </div>
           <div class="option-group">
             <label for="startNum">Start From</label>
-            <input type="number" id="startNum" value="1" min="1" max="9999"/>
+            <input type="number" id="startNum" aria-label="start num" value="1" min="1" max="9999"/>
           </div>
         </div>
 
         <div class="options-row">
           <div class="option-group">
             <label for="fontSize">Font Size (pt)</label>
-            <input type="number" id="fontSize" value="11" min="6" max="36"/>
+            <input type="number" id="fontSize" aria-label="font size" value="11" min="6" max="36"/>
           </div>
           <div class="option-group">
             <label for="fontColor">Font Color</label>
-            <select id="fontColor">
+            <select id="fontColor" aria-label="font color">
               <option value="black" selected>Black</option>
               <option value="gray">Gray</option>
               <option value="white">White (for dark PDFs)</option>
@@ -150,17 +150,17 @@
           </div>
           <div class="option-group">
             <label for="margin">Margin from edge (pt)</label>
-            <input type="number" id="margin" value="28" min="8" max="80"/>
+            <input type="number" id="margin" aria-label="margin" value="28" min="8" max="80"/>
           </div>
         </div>
 
         <!-- Progress -->
-        <div class="progress-wrap" id="progressWrap">
+        <div class="progress-wrap" id="progressWrap" aria-live="polite" aria-atomic="true">
           <div class="progress-label">
             <span class="msg" id="progressMsg">Numbering pages...</span>
             <span class="pct" id="progressPct">0%</span>
           </div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
         </div>
 
         <!-- Result -->

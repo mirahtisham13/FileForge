@@ -80,7 +80,7 @@
     <div class="nav-container">
       <a href="../index.html" class="nav-logo">
         <div class="logo-icon">
-          <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" fill="url(#g1)" opacity="0.2"/>
             <path d="M6 4C6 2.895 6.895 2 8 2H18L24 8V24C24 25.105 23.105 26 22 26H8C6.895 26 6 25.105 6 24V4Z" stroke="url(#g1)" stroke-width="1.5"/>
             <path d="M18 2V8H24" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round"/>
@@ -105,7 +105,7 @@
       
       <div class="tool-page-header">
         <div class="tool-page-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"/>
           </svg>
         </div>
@@ -122,7 +122,7 @@
         <div class="options-row">
           <div class="option-group">
             <label for="barcodeFormat">Format</label>
-            <select id="barcodeFormat">
+            <select id="barcodeFormat" aria-label="barcode format">
               <option value="CODE128" selected>Code 128 (Standard)</option>
               <option value="CODE39">Code 39</option>
               <option value="EAN13">EAN-13 (Product)</option>
@@ -137,7 +137,7 @@
           </div>
           <div class="option-group">
             <label for="displayValue">Show Text</label>
-            <select id="displayValue">
+            <select id="displayValue" aria-label="display value">
               <option value="true" selected>Yes</option>
               <option value="false">No</option>
             </select>

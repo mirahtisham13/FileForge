@@ -77,7 +77,7 @@ window.FFUtils = (function () {
       <span class="file-icon">📄</span>
       <span class="file-name" title="${file.name}">${file.name}</span>
       <span class="file-size">${formatBytes(file.size)}</span>
-      <button class="file-remove" title="Remove">✕</button>
+      <button class="file-remove" title="Remove" aria-label="Remove file">✕</button>
     `;
     item.querySelector('.file-remove').addEventListener('click', () => {
       item.remove();
