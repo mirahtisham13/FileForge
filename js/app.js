@@ -113,27 +113,7 @@
     }, { passive: true });
   }
 
-  // --- Animate tool cards on scroll ---
-  if ('IntersectionObserver' in window) {
-    const cards = document.querySelectorAll('.tool-card, .feature-item');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => {
-            e.target.style.opacity = '1';
-            e.target.style.transform = 'translateY(0)';
-          }, i * 60);
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    cards.forEach(c => {
-      c.style.opacity = '0';
-      c.style.transform = 'translateY(20px)';
-      c.style.transition = 'opacity 0.4s ease, transform 0.4s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease';
-      obs.observe(c);
-    });
-  }
+  // Hover effects are now purely CSS driven for 100/100 Core Web Vitals
 
   // --- Google Analytics 4 (GA4) Telemetry ---
   // To use this, just set window.GA_MEASUREMENT_ID or replace 'G-XXXXXXXXXX'
