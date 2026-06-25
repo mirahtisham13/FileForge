@@ -1,142 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fileforge.tech/</loc>
+    <loc>https://file-forge.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/barcode-generator</loc>
+    <loc>https://file-forge.dev/pages/barcode-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/barcode-scanner</loc>
+    <loc>https://file-forge.dev/pages/barcode-scanner</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/blur-image</loc>
+    <loc>https://file-forge.dev/pages/blur-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/color-picker</loc>
+    <loc>https://file-forge.dev/pages/color-picker</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/compress</loc>
+    <loc>https://file-forge.dev/pages/compress</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/compress-image</loc>
+    <loc>https://file-forge.dev/pages/compress-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/convert-image</loc>
+    <loc>https://file-forge.dev/pages/convert-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/crop-image</loc>
+    <loc>https://file-forge.dev/pages/crop-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/crop-pdf</loc>
+    <loc>https://file-forge.dev/pages/crop-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/extract-pdf</loc>
+    <loc>https://file-forge.dev/pages/extract-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/images-to-pdf</loc>
+    <loc>https://file-forge.dev/pages/images-to-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/image-to-text</loc>
+    <loc>https://file-forge.dev/pages/image-to-text</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/merge</loc>
+    <loc>https://file-forge.dev/pages/merge</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/merge-text</loc>
+    <loc>https://file-forge.dev/pages/merge-text</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/metadata-viewer</loc>
+    <loc>https://file-forge.dev/pages/metadata-viewer</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/password-generator</loc>
+    <loc>https://file-forge.dev/pages/password-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/pdf-page-numbering</loc>
+    <loc>https://file-forge.dev/pages/pdf-page-numbering</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/pdf-to-text</loc>
+    <loc>https://file-forge.dev/pages/pdf-to-text</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/pdf-to-word</loc>
+    <loc>https://file-forge.dev/pages/pdf-to-word</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/protect-pdf</loc>
+    <loc>https://file-forge.dev/pages/protect-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/qr-generator</loc>
+    <loc>https://file-forge.dev/pages/qr-generator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/rearrange</loc>
+    <loc>https://file-forge.dev/pages/rearrange</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/remove-background</loc>
+    <loc>https://file-forge.dev/pages/remove-background</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/resize-image</loc>
+    <loc>https://file-forge.dev/pages/resize-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/rotate</loc>
+    <loc>https://file-forge.dev/pages/rotate</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/rotate-image</loc>
+    <loc>https://file-forge.dev/pages/rotate-image</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fileforge.tech/pages/sign-pdf</loc>
+    <loc>https://file-forge.dev/pages/sign-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
