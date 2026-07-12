@@ -125,25 +125,73 @@
 
         if (targetVal > 0) {
           const tBytes = targetVal * (targetUnit.value === 'mb' ? 1024 * 1024 : 1024);
-          let minQ = 0.05, maxQ = 1.0, currentQ = 0.8;
+          
+          let currentScale = 1.0;
           let bestBlob = null;
           let bestDiff = Infinity;
           
-          for (let attempt = 0; attempt < 8; attempt++) {
-            currentQ = (minQ + maxQ) / 2;
-            const testBlob = await new Promise(res => canvas.toBlob(res, mime, currentQ));
-            
-            const diff = testBlob.size - tBytes;
-            if (testBlob.size <= tBytes && Math.abs(diff) < bestDiff) {
-              bestBlob = testBlob;
-              bestDiff = Math.abs(diff);
+          // Outer loop: reduce scale if quality drops too low
+          for (let scaleAttempt = 0; scaleAttempt < 6; scaleAttempt++) {
+            const testCanvas = document.createElement('canvas');
+            testCanvas.width = img.naturalWidth * currentScale;
+            testCanvas.height = img.naturalHeight * currentScale;
+            const tCtx = testCanvas.getContext('2d');
+            if (mime === 'image/jpeg') {
+              tCtx.fillStyle = '#ffffff';
+              tCtx.fillRect(0, 0, testCanvas.width, testCanvas.height);
             }
+            tCtx.drawImage(img, 0, 0, testCanvas.width, testCanvas.height);
 
-            if (Math.abs(diff) < (tBytes * 0.05)) { bestBlob = testBlob; break; }
-            if (testBlob.size > tBytes) maxQ = currentQ;
-            else minQ = currentQ;
+            let minQ = 0.1, maxQ = 1.0, currentQ = 0.8;
+            let foundInScale = false;
+
+            // Binary search for quality
+            for (let qAttempt = 0; qAttempt < 7; qAttempt++) {
+              currentQ = (minQ + maxQ) / 2;
+              const testBlob = await new Promise(res => testCanvas.toBlob(res, mime, currentQ));
+              
+              const diff = testBlob.size - tBytes;
+              
+              // Only save if it's under or exactly the target
+              if (testBlob.size <= tBytes) {
+                if (Math.abs(diff) < bestDiff) {
+                  bestBlob = testBlob;
+                  bestDiff = Math.abs(diff);
+                }
+                foundInScale = true;
+                minQ = currentQ; // try to increase quality to get closer to target
+              } else {
+                maxQ = currentQ; // file too big, decrease quality
+              }
+
+              // If we are within 2% of the target, it's perfect
+              if (testBlob.size <= tBytes && Math.abs(diff) < (tBytes * 0.02)) {
+                break;
+              }
+            }
+            
+            if (foundInScale && bestDiff < (tBytes * 0.15)) {
+               // We found a blob in this scale that is within 15% of the target, stop scaling down!
+               break;
+            }
+            
+            // If even at the lowest quality (0.1) it's too big, or we want closer match, scale down
+            currentScale *= 0.75; // reduce dimensions by 25%
           }
-          blob = bestBlob || await new Promise(res => canvas.toBlob(res, mime, 0.05));
+          
+          blob = bestBlob;
+          
+          // If we somehow failed to ever get below target (e.g. microscopic target), just take lowest possible
+          if (!blob) {
+            const testCanvas = document.createElement('canvas');
+            testCanvas.width = img.naturalWidth * 0.25;
+            testCanvas.height = img.naturalHeight * 0.25;
+            const tCtx = testCanvas.getContext('2d');
+            if (mime === 'image/jpeg') { tCtx.fillStyle = '#ffffff'; tCtx.fillRect(0, 0, testCanvas.width, testCanvas.height); }
+            tCtx.drawImage(img, 0, 0, testCanvas.width, testCanvas.height);
+            blob = await new Promise(res => testCanvas.toBlob(res, mime, 0.1));
+          }
+          
         } else {
           blob = await new Promise(res => canvas.toBlob(res, mime, quality));
         }

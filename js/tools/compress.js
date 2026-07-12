@@ -91,11 +91,19 @@
       const pdfjsDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
       const numPages = pdfjsDoc.numPages;
 
-      // If target size is set, auto-calculate quality to try to hit it
+      // If target size is set, auto-calculate quality and scale to try to hit it
+      let pageScale = 1.5; // Default high quality scale
       if (targetBytes) {
-        // Estimate needed quality ratio: target / original (with a safety factor)
-        const ratio = Math.max(0.05, Math.min(0.95, (targetBytes / origSize) * 0.85));
-        imgQuality = ratio;
+        // Estimate needed quality ratio: target / original
+        const ratio = Math.max(0.05, Math.min(0.95, targetBytes / origSize));
+        // Distribute the compression between quality and resolution scale
+        imgQuality = Math.max(0.1, ratio * 1.2); 
+        pageScale = Math.max(0.5, 1.5 * Math.sqrt(ratio)); 
+      } else {
+        // If user didn't specify target size, use the quality dropdown to scale too
+        if (imgQuality <= 0.3) pageScale = 0.8;
+        else if (imgQuality <= 0.6) pageScale = 1.0;
+        else pageScale = 1.5;
       }
 
       // Compress by rendering each page to canvas at reduced quality
@@ -106,7 +114,7 @@
         setProgress(pct, `Processing page ${i} of ${numPages}...`);
 
         const page = await pdfjsDoc.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 }); // 1.5x for good quality output
+        const viewport = page.getViewport({ scale: pageScale }); // Dynamic scale based on target
 
         // Render to offscreen canvas
         const canvas = document.createElement('canvas');
