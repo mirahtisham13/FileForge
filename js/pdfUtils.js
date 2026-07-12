@@ -74,12 +74,58 @@ window.FFUtils = (function () {
     item.dataset.filename = file.name;
     item.innerHTML = `
       <span class="drag-handle" title="Drag to reorder">⠿</span>
-      <span class="file-icon">📄</span>
+      <span class="file-icon preview-container">📄</span>
       <span class="file-name" title="${file.name}">${file.name}</span>
       <span class="file-size">${formatBytes(file.size)}</span>
       <button class="file-remove" title="Remove" aria-label="Remove file">✕</button>
     `;
+
+    const iconContainer = item.querySelector('.file-icon');
+    let objectUrl = null;
+
+    if (file.type.startsWith('image/')) {
+      objectUrl = URL.createObjectURL(file);
+      iconContainer.innerHTML = \`<img class="file-preview-img" src="\${objectUrl}" alt="Preview" />\`;
+    } else if (file.type === 'application/pdf') {
+      const renderPdfThumbnail = async () => {
+        try {
+          if (!window.pdfjsLib) {
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+              script.onload = () => {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                resolve();
+              };
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+          }
+          
+          objectUrl = URL.createObjectURL(file);
+          const loadingTask = pdfjsLib.getDocument(objectUrl);
+          const pdf = await loadingTask.promise;
+          const page = await pdf.getPage(1);
+          
+          const viewport = page.getViewport({ scale: 0.5 });
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          canvas.className = 'file-preview-img';
+          
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
+          iconContainer.innerHTML = '';
+          iconContainer.appendChild(canvas);
+        } catch (err) {
+          console.warn('PDF thumbnail generation failed:', err);
+        }
+      };
+      renderPdfThumbnail();
+    }
+
     item.querySelector('.file-remove').addEventListener('click', () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
       item.remove();
       onRemove(file);
     });
