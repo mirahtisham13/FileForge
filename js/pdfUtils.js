@@ -85,7 +85,7 @@ window.FFUtils = (function () {
 
     if (file.type.startsWith('image/')) {
       objectUrl = URL.createObjectURL(file);
-      iconContainer.innerHTML = \`<img class="file-preview-img" src="\${objectUrl}" alt="Preview" />\`;
+      iconContainer.innerHTML = `<img class="file-preview-img" src="${objectUrl}" alt="Preview" />`;
     } else if (file.type === 'application/pdf') {
       const renderPdfThumbnail = async () => {
         try {
