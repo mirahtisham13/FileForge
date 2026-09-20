@@ -6,6 +6,7 @@
   
   <p>
     100% private, browser-based tools. No limits, no accounts, and your files never leave your device.
+    www.file-forge.dev
   </p>
 
   <!-- Badges -->
